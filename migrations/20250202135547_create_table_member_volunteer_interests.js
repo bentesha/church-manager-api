@@ -19,7 +19,7 @@ exports.up = function (knex) {
       table
         .foreign('volunteerOpportunityId')
         .references('id')
-        .inTable('volunteerOpportunities')
+        .inTable('volunteer_opportunities')
         .onDelete('CASCADE');
 
       table.timestamp('createdAt').defaultTo(knex.fn.now()); // Timestamp for when interest was expressed
@@ -33,5 +33,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable('memberVolunteerInterests');
+  return knex.schema.dropTable('member_volunteer_interests');
 };
