@@ -28,6 +28,7 @@ Ensure you have the following installed:
 - **Node.js** (v16+ recommended)
 - **MySQL**
 - **Yarn or npm**
+- **Docker** (optional, for containerized setup)
 
 ### Installation
 
@@ -44,6 +45,9 @@ Ensure you have the following installed:
    ```sh
    cp .env.example .env
    ```
+
+### Running Locally
+
 4. Run database migrations:
    ```sh
    npx knex migrate:latest
@@ -55,6 +59,21 @@ Ensure you have the following installed:
 6. Start the application:
    ```sh
    npm run start:dev
+   ```
+
+### Running with Docker Compose
+
+4. Run the application with Docker Compose:
+   ```sh
+   docker compose up -d
+   ```
+5. Run database migrations:
+   ```sh
+   docker compose exec api npx knex migrate:latest
+   ```
+6. Seed the database with default roles and admin user:
+   ```sh
+   docker compose exec api npx knex seed:run
    ```
 
 ## Contributing
