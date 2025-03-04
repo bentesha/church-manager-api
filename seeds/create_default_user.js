@@ -88,11 +88,13 @@ exports.seed = async function (knex) {
     'user.create',
     'user.update',
     'user.delete',
+    'role.findAll',
+    'role.findById',
   ];
 
   // Recreate user roles
   await knex('role_actions').delete();
-  
+
   for (const action of roleActions) {
     await knex('role_actions').insert({
       id: uuid().replaceAll('-', ''),
