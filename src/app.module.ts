@@ -14,10 +14,11 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { Config } from './config';
 import { RoleService } from './services/role.service';
 import { RoleController } from './controllers/role.controller';
+import { ChurchController } from './controllers/church.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController, AuthController, RoleController],
+  controllers: [AppController, UserController, AuthController, RoleController, ChurchController],
   providers: [
     AppService,
     ChurchService,
