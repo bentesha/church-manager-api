@@ -7,8 +7,9 @@ This document outlines all available API endpoints, request/response formats, an
 1. [Authentication](#authentication)
 2. [Users](#users)
 3. [Churches](#churches)
-4. [Roles](#roles)
-5. [Error Handling](#error-handling)
+4. [Fellowships](#fellowships)
+5. [Roles](#roles)
+6. [Error Handling](#error-handling)
 
 ## Authentication
 
@@ -306,6 +307,178 @@ Deletes a user (soft delete).
 }
 ```
 
+## Churches
+
+Endpoints for managing church information.
+
+### Get Current User's Church
+
+Retrieves the church information associated with the currently authenticated user.
+
+- **URL**: `/church/me`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+	"id": "19d4e951c2324768b20d689e2fc1ce81",
+	"name": "My Church",
+	"domainName": "mychurch.com",
+	"registrationNumber": "CHURCH-0001",
+	"contactPhone": "1234567890",
+	"contactEmail": "contact@mychurch.com",
+	"createdAt": "2025-03-04T01:36:07.000Z",
+	"updatedAt": "2025-03-04T01:36:07.000Z"
+}
+```
+
+#### Error Response
+
+- **Code**: 401 Unauthorized
+  - This status code indicates that the provided token is invalid or expired
+- **Content**: No content returned
+
+## Fellowships
+
+Endpoints for managing fellowships.
+
+### Get All Fellowships
+
+Retrieves a list of all fellowships.
+
+- **URL**: `/fellowship`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+[
+  {
+    "id": "3ebc4ece469349e294b196f69e424ef9",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "name": "TUMAINI",
+    "notes": "Tumaini fellowship",
+    "createdAt": "2025-03-05T05:10:38.000Z",
+    "updatedAt": "2025-03-05T05:11:45.000Z",
+    "chairmanId": null,
+    "deputyChairmanId": null,
+    "secretaryId": null,
+    "treasurerId": null
+  }
+  // More fellowships...
+]
+```
+
+### Get Fellowship by ID
+
+Retrieves a specific fellowship by ID.
+
+- **URL**: `/fellowship/:id`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "3ebc4ece469349e294b196f69e424ef9",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "TUMAINI",
+  "notes": "Tumaini fellowship",
+  "createdAt": "2025-03-05T05:10:38.000Z",
+  "updatedAt": "2025-03-05T05:11:45.000Z",
+  "chairmanId": null,
+  "deputyChairmanId": null,
+  "secretaryId": null,
+  "treasurerId": null
+}
+```
+
+### Create Fellowship
+
+Creates a new fellowship.
+
+- **URL**: `/fellowship`
+- **Method**: `POST`
+- **Auth Required**: Yes (Bearer token)
+
+#### Request Body
+
+```json
+{
+  "name": "TUMAINI",
+  "notes": "Tumaini fellowship"
+}
+```
+
+#### Success Response
+
+- **Code**: 201 Created
+- **Content**:
+
+```json
+{
+  "id": "3ebc4ece469349e294b196f69e424ef9",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "TUMAINI",
+  "notes": "Tumaini fellowship",
+  "createdAt": "2025-03-05T05:10:38.000Z",
+  "updatedAt": "2025-03-05T05:11:45.000Z",
+  "chairmanId": null,
+  "deputyChairmanId": null,
+  "secretaryId": null,
+  "treasurerId": null
+}
+```
+
+### Update Fellowship
+
+Updates an existing fellowship.
+
+- **URL**: `/fellowship/:id`
+- **Method**: `PATCH`
+- **Auth Required**: Yes (Bearer token)
+
+#### Request Body
+
+```json
+{
+  "name": "TUMAINI",
+  "notes": "Tumaini fellowship"
+}
+```
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "3ebc4ece469349e294b196f69e424ef9",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "TUMAINI",
+  "notes": "Tumaini fellowship",
+  "createdAt": "2025-03-05T05:10:38.000Z",
+  "updatedAt": "2025-03-05T05:11:45.000Z",
+  "chairmanId": null,
+  "deputyChairmanId": null,
+  "secretaryId": null,
+  "treasurerId": null
+}
+```
 
 ## Roles
 
