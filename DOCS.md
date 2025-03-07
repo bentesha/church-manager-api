@@ -8,8 +8,9 @@ This document outlines all available API endpoints, request/response formats, an
 2. [Users](#users)
 3. [Churches](#churches)
 4. [Fellowships](#fellowships)
-5. [Roles](#roles)
-6. [Error Handling](#error-handling)
+5. [Members](#members)
+6. [Roles](#roles)
+7. [Error Handling](#error-handling)
 
 ## Authentication
 
@@ -354,6 +355,7 @@ Retrieves a list of all fellowships.
 - **URL**: `/fellowship`
 - **Method**: `GET`
 - **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `fellowship.findAll`
 
 #### Success Response
 
@@ -385,6 +387,7 @@ Retrieves a specific fellowship by ID.
 - **URL**: `/fellowship/:id`
 - **Method**: `GET`
 - **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `fellowship.findById`
 
 #### Success Response
 
@@ -413,6 +416,7 @@ Creates a new fellowship.
 - **URL**: `/fellowship`
 - **Method**: `POST`
 - **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `fellowship.create`
 
 #### Request Body
 
@@ -450,6 +454,7 @@ Updates an existing fellowship.
 - **URL**: `/fellowship/:id`
 - **Method**: `PATCH`
 - **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `fellowship.update`
 
 #### Request Body
 
@@ -477,6 +482,380 @@ Updates an existing fellowship.
   "deputyChairmanId": null,
   "secretaryId": null,
   "treasurerId": null
+}
+```
+
+## Members
+
+Endpoints for managing church members.
+
+### Enumerated Field Values
+
+The following table shows all possible values for enumerated fields in the member schema:
+
+| Field | Possible Values |
+|-------|----------------|
+| gender | "Male", "Female" |
+| maritalStatus | "Single", "Married", "Separated", "Divorced" |
+| marriageType | "Christian", "Non-Christian" |
+| educationLevel | "Informal", "Primary", "Secondary", "Certificate", "Diploma", "Bachelors", "Masters", "Doctorate", "Other" |
+| memberRole | "Clergy", "Staff", "Regular", "Leader", "Volunteer" |
+
+### Get All Members
+
+Retrieves a list of all members belonging to the current church.
+
+- **URL**: `/member`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `member.findAll`
+- **Query Parameters**:
+  - Supports objection-find library query parameters for filtering
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+[
+  {
+    "id": "1d4b928612524eaa93c3d84ecf433ef2",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "envelopeNumber": "1245",
+    "firstName": "John",
+    "middleName": "Michael",
+    "lastName": "Doe",
+    "gender": "Male",
+    "dateOfBirth": "1985-06-14T21:00:00.000Z",
+    "placeOfBirth": "Dar es Salaam",
+    "profilePhoto": "https://example.com/photos/john-doe.jpg",
+    "maritalStatus": "Married",
+    "marriageType": "Christian",
+    "dateOfMarriage": "2010-09-21T21:00:00.000Z",
+    "spouseName": "Sarah Doe",
+    "placeOfMarriage": "Arusha",
+    "phoneNumber": "255712345678",
+    "email": "john.doe@example.com",
+    "spousePhoneNumber": "255798765432",
+    "residenceNumber": "Block 5, House 23",
+    "residenceBlock": "Mikocheni B",
+    "postalBox": "P.O. Box 12345",
+    "residenceArea": "Mikocheni",
+    "formerChurch": "Grace Community Church",
+    "occupation": "Software Engineer",
+    "placeOfWork": "Tech Solutions Ltd",
+    "educationLevel": "Bachelors",
+    "profession": "Computer Science",
+    "memberRole": "Regular",
+    "isBaptized": 1,
+    "isConfirmed": 1,
+    "partakesLordSupper": 1,
+    "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
+    "nearestMemberName": "James Wilson",
+    "nearestMemberPhone": "+255723456789",
+    "attendsFellowship": 1,
+    "fellowshipAbsenceReason": null,
+    "createdAt": "2025-03-07T04:41:29.000Z",
+    "updatedAt": "2025-03-07T04:41:29.000Z"
+  }
+  // More members...
+]
+```
+
+### Get Member by ID
+
+Retrieves a specific member by ID.
+
+- **URL**: `/member/:id`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `member.findById`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "1d4b928612524eaa93c3d84ecf433ef2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "envelopeNumber": "1245",
+  "firstName": "John",
+  "middleName": "Michael",
+  "lastName": "Doe",
+  "gender": "Male",
+  "dateOfBirth": "1985-06-14T21:00:00.000Z",
+  "placeOfBirth": "Dar es Salaam",
+  "profilePhoto": "https://example.com/photos/john-doe.jpg",
+  "maritalStatus": "Married",
+  "marriageType": "Christian",
+  "dateOfMarriage": "2010-09-21T21:00:00.000Z",
+  "spouseName": "Sarah Doe",
+  "placeOfMarriage": "Arusha",
+  "phoneNumber": "255712345678",
+  "email": "john.doe@example.com",
+  "spousePhoneNumber": "255798765432",
+  "residenceNumber": "Block 5, House 23",
+  "residenceBlock": "Mikocheni B",
+  "postalBox": "P.O. Box 12345",
+  "residenceArea": "Mikocheni",
+  "formerChurch": "Grace Community Church",
+  "occupation": "Software Engineer",
+  "placeOfWork": "Tech Solutions Ltd",
+  "educationLevel": "Bachelors",
+  "profession": "Computer Science",
+  "memberRole": "Regular",
+  "isBaptized": 1,
+  "isConfirmed": 1,
+  "partakesLordSupper": 1,
+  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
+  "nearestMemberName": "James Wilson",
+  "nearestMemberPhone": "+255723456789",
+  "attendsFellowship": 1,
+  "fellowshipAbsenceReason": null,
+  "createdAt": "2025-03-07T04:41:29.000Z",
+  "updatedAt": "2025-03-07T04:41:29.000Z"
+}
+```
+
+### Create Member
+
+Creates a new member.
+
+- **URL**: `/member`
+- **Method**: `POST`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `member.create`
+
+#### Request Body
+
+```json
+{
+  "envelopeNumber": "1245",
+  "firstName": "John",
+  "middleName": "Michael",
+  "lastName": "Doe",
+  "gender": "Male",
+  "dateOfBirth": "1985-06-15",
+  "placeOfBirth": "Dar es Salaam",
+  "profilePhoto": "https://example.com/photos/john-doe.jpg",
+  "maritalStatus": "Married",
+  "marriageType": "Christian",
+  "dateOfMarriage": "2010-09-22",
+  "spouseName": "Sarah Doe",
+  "placeOfMarriage": "Arusha",
+  "phoneNumber": "255712345678",
+  "email": "john.doe@example.com",
+  "spousePhoneNumber": "255798765432",
+  "residenceNumber": "Block 5, House 23",
+  "residenceBlock": "Mikocheni B",
+  "postalBox": "P.O. Box 12345",
+  "residenceArea": "Mikocheni",
+  "formerChurch": "Grace Community Church",
+  "occupation": "Software Engineer",
+  "placeOfWork": "Tech Solutions Ltd",
+  "educationLevel": "Bachelors",
+  "profession": "Computer Science",
+  "memberRole": "Regular",
+  "isBaptized": true,
+  "isConfirmed": true,
+  "partakesLordSupper": true,
+  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
+  "nearestMemberName": "James Wilson",
+  "nearestMemberPhone": "+255723456789",
+  "attendsFellowship": true,
+  "fellowshipAbsenceReason": null
+}
+```
+
+#### Success Response
+
+- **Code**: 201 Created
+- **Content**:
+
+```json
+{
+  "id": "1d4b928612524eaa93c3d84ecf433ef2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "envelopeNumber": "1245",
+  "firstName": "John",
+  "middleName": "Michael",
+  "lastName": "Doe",
+  "gender": "Male",
+  "dateOfBirth": "1985-06-14T21:00:00.000Z",
+  "placeOfBirth": "Dar es Salaam",
+  "profilePhoto": "https://example.com/photos/john-doe.jpg",
+  "maritalStatus": "Married",
+  "marriageType": "Christian",
+  "dateOfMarriage": "2010-09-21T21:00:00.000Z",
+  "spouseName": "Sarah Doe",
+  "placeOfMarriage": "Arusha",
+  "phoneNumber": "255712345678",
+  "email": "john.doe@example.com",
+  "spousePhoneNumber": "255798765432",
+  "residenceNumber": "Block 5, House 23",
+  "residenceBlock": "Mikocheni B",
+  "postalBox": "P.O. Box 12345",
+  "residenceArea": "Mikocheni",
+  "formerChurch": "Grace Community Church",
+  "occupation": "Software Engineer",
+  "placeOfWork": "Tech Solutions Ltd",
+  "educationLevel": "Bachelors",
+  "profession": "Computer Science",
+  "memberRole": "Regular",
+  "isBaptized": 1,
+  "isConfirmed": 1,
+  "partakesLordSupper": 1,
+  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
+  "nearestMemberName": "James Wilson",
+  "nearestMemberPhone": "+255723456789",
+  "attendsFellowship": 1,
+  "fellowshipAbsenceReason": null,
+  "createdAt": "2025-03-07T04:41:29.000Z",
+  "updatedAt": "2025-03-07T04:41:29.000Z"
+}
+```
+
+#### Error Response
+
+- **Code**: 400 Bad Request
+- **Content**:
+
+```json
+{
+  "statusCode": 400,
+  "message": "Validation failed",
+  "error": "Validation Error",
+  "details": {
+    "fellowshipId": "\"fellowshipId\" is required"
+  }
+}
+```
+
+### Update Member
+
+Updates an existing member.
+
+- **URL**: `/member/:id`
+- **Method**: `PATCH`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `member.update`
+
+#### Request Body
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "phoneNumber": "255712345678",
+  "email": "john.smith@example.com"
+}
+```
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "1d4b928612524eaa93c3d84ecf433ef2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "envelopeNumber": "1245",
+  "firstName": "John",
+  "middleName": "Michael",
+  "lastName": "Smith",
+  "gender": "Male",
+  "dateOfBirth": "1985-06-14T21:00:00.000Z",
+  "placeOfBirth": "Dar es Salaam",
+  "profilePhoto": "https://example.com/photos/john-doe.jpg",
+  "maritalStatus": "Married",
+  "marriageType": "Christian",
+  "dateOfMarriage": "2010-09-21T21:00:00.000Z",
+  "spouseName": "Sarah Doe",
+  "placeOfMarriage": "Arusha",
+  "phoneNumber": "255712345678",
+  "email": "john.smith@example.com",
+  "spousePhoneNumber": "255798765432",
+  "residenceNumber": "Block 5, House 23",
+  "residenceBlock": "Mikocheni B",
+  "postalBox": "P.O. Box 12345",
+  "residenceArea": "Mikocheni",
+  "formerChurch": "Grace Community Church",
+  "occupation": "Software Engineer",
+  "placeOfWork": "Tech Solutions Ltd",
+  "educationLevel": "Bachelors",
+  "profession": "Computer Science",
+  "memberRole": "Regular",
+  "isBaptized": 1,
+  "isConfirmed": 1,
+  "partakesLordSupper": 1,
+  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
+  "nearestMemberName": "James Wilson",
+  "nearestMemberPhone": "+255723456789",
+  "attendsFellowship": 1,
+  "fellowshipAbsenceReason": null,
+  "createdAt": "2025-03-07T04:41:29.000Z",
+  "updatedAt": "2025-03-07T05:15:42.000Z"
+}
+```
+
+### Delete Member
+
+Deletes a member.
+
+- **URL**: `/member/:id`
+- **Method**: `DELETE`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `member.deleteById`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "1d4b928612524eaa93c3d84ecf433ef2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "envelopeNumber": "1245",
+  "firstName": "John",
+  "middleName": "Michael",
+  "lastName": "Smith",
+  "gender": "Male",
+  "dateOfBirth": "1985-06-14T21:00:00.000Z",
+  "placeOfBirth": "Dar es Salaam",
+  "profilePhoto": "https://example.com/photos/john-doe.jpg",
+  "maritalStatus": "Married",
+  "marriageType": "Christian",
+  "dateOfMarriage": "2010-09-21T21:00:00.000Z",
+  "spouseName": "Sarah Doe",
+  "placeOfMarriage": "Arusha",
+  "phoneNumber": "255712345678",
+  "email": "john.smith@example.com",
+  "spousePhoneNumber": "255798765432",
+  "residenceNumber": "Block 5, House 23",
+  "residenceBlock": "Mikocheni B",
+  "postalBox": "P.O. Box 12345",
+  "residenceArea": "Mikocheni",
+  "formerChurch": "Grace Community Church",
+  "occupation": "Software Engineer",
+  "placeOfWork": "Tech Solutions Ltd",
+  "educationLevel": "Bachelors",
+  "profession": "Computer Science",
+  "memberRole": "Regular",
+  "isBaptized": 1,
+  "isConfirmed": 1,
+  "partakesLordSupper": 1,
+  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
+  "nearestMemberName": "James Wilson",
+  "nearestMemberPhone": "+255723456789",
+  "attendsFellowship": 1,
+  "fellowshipAbsenceReason": null,
+  "createdAt": "2025-03-07T04:41:29.000Z",
+  "updatedAt": "2025-03-07T05:15:42.000Z"
 }
 ```
 

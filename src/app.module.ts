@@ -17,10 +17,12 @@ import { RoleController } from './controllers/role.controller';
 import { ChurchController } from './controllers/church.controller';
 import { FellowshipService } from './services/fellowship.service';
 import { FellowshipController } from './controllers/fellowship.controller';
+import { MemberService } from './services/member.service';
+import { MemberController } from './controllers/member.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController, AuthController, RoleController, ChurchController, FellowshipController],
+  controllers: [AppController, UserController, AuthController, RoleController, ChurchController, FellowshipController, MemberController],
   providers: [
     AppService,
     ChurchService,
@@ -33,6 +35,7 @@ import { FellowshipController } from './controllers/fellowship.controller';
     Config,
     RoleService,
     FellowshipService,
+    MemberService,
   ],
 })
 export class AppModule {

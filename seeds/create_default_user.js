@@ -94,6 +94,11 @@ exports.seed = async function (knex) {
     'fellowship.findAll',
     'fellowship.create',
     'fellowship.update',
+    'member.findAll',
+    'member.findById',
+    'member.create',
+    'member.update',
+    'member.deleteById',
   ];
 
   // Recreate user roles
