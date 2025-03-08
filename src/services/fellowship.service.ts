@@ -9,12 +9,18 @@ export interface CreateFellowshipInfo {
   churchId: string;
   name: string;
   notes?: string | null;
+  // Leadership roles are not included in creation
+  // as members need to be created and assigned to the fellowship first
 }
 
 export interface UpdateFellowshipInfo {
   churchId?: string;
   name?: string;
   notes?: string | null;
+  chairmanId?: string | null;
+  deputyChairmanId?: string | null;
+  secretaryId?: string | null;
+  treasurerId?: string | null;
 }
 
 @Injectable()
@@ -30,7 +36,9 @@ export class FellowshipService {
    * @returns The fellowship record or undefined if not found.
    */
   async findById(id: string): Promise<Fellowship | undefined> {
-    return Fellowship.query().findById(id);
+    return Fellowship.query()
+      .findById(id)
+      .withGraphFetched('[chairman, deputyChairman, secretary, treasurer]');
   }
 
   /**
@@ -41,7 +49,11 @@ export class FellowshipService {
   async findOne(
     query: Partial<FellowshipRow>,
   ): Promise<Fellowship | undefined> {
-    return findQuery(Fellowship).allowAll(true).build(query).first();
+    return findQuery(Fellowship)
+      .allowEager('[chairman, deputyChairman, secretary, treasurer]')!
+      .allowAll(true)
+      .build(query)
+      .first();
   }
 
   /**
@@ -50,15 +62,16 @@ export class FellowshipService {
    * @returns A list of matching fellowships.
    */
   async findAll(query: Partial<FellowshipRow>): Promise<Array<Fellowship>> {
-    return findQuery(Fellowship).allowAll(true).build(query);
+    return findQuery(Fellowship)
+      .allowEager('[chairman, deputyChairman, secretary, treasurer]')!
+      .allowAll(true)
+      .build(query);
   }
 
   /**
    * Creates a new fellowship record in the database.
    * @param info - The fellowship details to be saved.
    * @returns The created fellowship record.
-   *
-   * @note Consider using transactions to ensure consistency in case of failures.
    */
   async create(info: CreateFellowshipInfo): Promise<Fellowship> {
     const row: FellowshipRow = {
@@ -66,11 +79,14 @@ export class FellowshipService {
       churchId: info.churchId,
       name: info.name,
       notes: info.notes || null,
+      chairmanId: null, // Initialize with no chairman
+      deputyChairmanId: null, // Initialize with no deputy chairman
+      secretaryId: null, // Initialize with no secretary
+      treasurerId: null, // Initialize with no treasurer
       createdAt: this.dateHelper.formatDateTime(), // Set creation timestamp
       updatedAt: this.dateHelper.formatDateTime(), // Set initial update timestamp
     };
 
-    // Consider wrapping in a transaction for data consistency
     await Fellowship.query().insert(row);
     const fellowship = await this.findById(row.id);
     return fellowship!;
@@ -81,8 +97,6 @@ export class FellowshipService {
    * @param id - The fellowship ID to update.
    * @param info - The fields to be updated.
    * @returns The updated fellowship record or undefined if not found.
-   *
-   * @note Logging should be added to track updates for auditing purposes.
    */
   async update(
     id: string,
@@ -92,11 +106,21 @@ export class FellowshipService {
       churchId: info.churchId,
       name: info.name,
       notes: info.notes,
+      chairmanId: info.chairmanId,
+      deputyChairmanId: info.deputyChairmanId,
+      secretaryId: info.secretaryId,
+      treasurerId: info.treasurerId,
       updatedAt: this.dateHelper.formatDateTime(), // Update timestamp
     };
 
+    // Filter out undefined properties
+    Object.keys(updates).forEach((key) => {
+      if (updates[key] === undefined) {
+        delete updates[key];
+      }
+    });
+
     await Fellowship.query().where({ id }).update(updates);
-    // Consider adding logging here to track update activity.
     return this.findById(id);
   }
 
@@ -104,8 +128,6 @@ export class FellowshipService {
    * Deletes a fellowship record by its ID.
    * @param id - The fellowship ID to delete.
    * @returns The deleted fellowship record, or undefined if not found.
-   *
-   * @note Instead of hard deletion, consider adding a soft delete flag (e.g., isDeleted column).
    */
   async delete(id: string): Promise<Fellowship | undefined> {
     const fellowship = await this.findById(id);
@@ -113,9 +135,6 @@ export class FellowshipService {
     if (!fellowship) {
       return undefined; // Fellowship not found
     }
-
-    // Instead of deleting, consider updating an `isDeleted` flag
-    // await Fellowship.query().where({ id }).update({ isDeleted: true });
 
     await Fellowship.query().deleteById(id);
     return fellowship;

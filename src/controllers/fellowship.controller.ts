@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { Check } from 'src/decoractors/check.decorator';
 import { MyChurch } from 'src/decorators/my.church.decorator';
@@ -24,12 +25,19 @@ import {
   FellowshipService,
   UpdateFellowshipInfo,
 } from 'src/services/fellowship.service';
-import { CreateFellowshipValidator } from 'src/validators/fellowship.validators';
+import {
+  CreateFellowshipValidator,
+  UpdateFellowshipValidator,
+} from 'src/validators/fellowship.validators';
+import { MemberService } from 'src/services/member.service';
 
 @Controller('fellowship')
 @UseGuards(CheckGuard)
 export class FellowshipController {
-  constructor(private readonly fellowshipService: FellowshipService) {}
+  constructor(
+    private readonly fellowshipService: FellowshipService,
+    private readonly memberService: MemberService,
+  ) {}
 
   @Get()
   @Check('fellowship.findAll')
@@ -67,13 +75,17 @@ export class FellowshipController {
       });
     }
 
+    // For create, we don't accept leadership roles initially
+    // as members need to be created first and assigned to this fellowship
+
     const info: CreateFellowshipInfo = {
       name: body.name,
       notes: body.notes,
       churchId: church.id,
     };
 
-    return this.fellowshipService.create(info);
+    const fellowship = await this.fellowshipService.create(info);
+    return fellowship;
   }
 
   @Patch('/:id')
@@ -81,7 +93,7 @@ export class FellowshipController {
   async update(
     @MyChurch() church: Church,
     @Param('id') id: string,
-    @Body() body: UpdateFellowshipDto,
+    @Body(UpdateFellowshipValidator) body: UpdateFellowshipDto,
   ) {
     // Verify the fellowship exists and belongs to this church
     const fellowship = await this.fellowshipService.findById(id);
@@ -103,9 +115,16 @@ export class FellowshipController {
       }
     }
 
+    // Validate leadership roles if provided
+    await this.validateLeadershipRoles(church.id, id, body);
+
     const info: UpdateFellowshipInfo = {
       name: body.name,
       notes: body.notes,
+      chairmanId: body.chairmanId,
+      deputyChairmanId: body.deputyChairmanId,
+      secretaryId: body.secretaryId,
+      treasurerId: body.treasurerId,
     };
 
     const updatedFellowship = await this.fellowshipService.update(id, info);
@@ -122,5 +141,45 @@ export class FellowshipController {
     }
 
     return this.fellowshipService.delete(id);
+  }
+
+  /**
+   * Validates that the members assigned to leadership roles
+   * are actually members of the fellowship
+   */
+  private async validateLeadershipRoles(
+    churchId: string,
+    fellowshipId: string | null,
+    body: UpdateFellowshipDto,
+  ) {
+    const leadershipRoles = {
+      chairman: body.chairmanId,
+      deputyChairman: body.deputyChairmanId,
+      secretary: body.secretaryId,
+      treasurer: body.treasurerId,
+    };
+
+    for (const [role, memberId] of Object.entries(leadershipRoles)) {
+      if (memberId) {
+        // Check if member exists and belongs to the church
+        const member = await this.memberService.findById(memberId);
+        if (!member || member.churchId !== churchId) {
+          throw new ValidationException({
+            [role + 'Id']: `Invalid member ID for ${role}`,
+          });
+        }
+
+        // For updates, we need to ensure the member belongs to this fellowship
+        // For creation, we'll validate after creation since the fellowship doesn't exist yet
+        if (fellowshipId) {
+          if (member.fellowshipId !== fellowshipId) {
+            throw new ValidationException({
+              [role + 'Id']:
+                `Member must belong to this fellowship to be assigned as ${role}`,
+            });
+          }
+        }
+      }
+    }
   }
 }

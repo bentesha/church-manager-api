@@ -347,7 +347,7 @@ Retrieves the church information associated with the currently authenticated use
 
 ## Fellowships
 
-Endpoints for managing fellowships.
+Endpoints for managing fellowships and their leadership roles.
 
 ### Get All Fellowships
 
@@ -370,12 +370,26 @@ Retrieves a list of all fellowships.
     "churchId": "19d4e951c2324768b20d689e2fc1ce81",
     "name": "TUMAINI",
     "notes": "Tumaini fellowship",
+    "chairmanId": "1d4b928612524eaa93c3d84ecf433ef2",
+    "deputyChairmanId": null,
+    "secretaryId": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+    "treasurerId": null,
     "createdAt": "2025-03-05T05:10:38.000Z",
     "updatedAt": "2025-03-05T05:11:45.000Z",
-    "chairmanId": null,
-    "deputyChairmanId": null,
-    "secretaryId": null,
-    "treasurerId": null
+    "chairman": {
+      "id": "1d4b928612524eaa93c3d84ecf433ef2",
+      "firstName": "John",
+      "lastName": "Doe",
+      "phoneNumber": "255712345678"
+      // Other member fields...
+    },
+    "secretary": {
+      "id": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "phoneNumber": "255723456789"
+      // Other member fields...
+    }
   }
   // More fellowships...
 ]
@@ -401,18 +415,32 @@ Retrieves a specific fellowship by ID.
   "churchId": "19d4e951c2324768b20d689e2fc1ce81",
   "name": "TUMAINI",
   "notes": "Tumaini fellowship",
+  "chairmanId": "1d4b928612524eaa93c3d84ecf433ef2",
+  "deputyChairmanId": null,
+  "secretaryId": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+  "treasurerId": null,
   "createdAt": "2025-03-05T05:10:38.000Z",
   "updatedAt": "2025-03-05T05:11:45.000Z",
-  "chairmanId": null,
-  "deputyChairmanId": null,
-  "secretaryId": null,
-  "treasurerId": null
+  "chairman": {
+    "id": "1d4b928612524eaa93c3d84ecf433ef2",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phoneNumber": "255712345678"
+    // Other member fields...
+  },
+  "secretary": {
+    "id": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "phoneNumber": "255723456789"
+    // Other member fields...
+  }
 }
 ```
 
 ### Create Fellowship
 
-Creates a new fellowship.
+Creates a new fellowship without leadership roles. Leadership roles can be assigned later using the update endpoint once members have been created and assigned to the fellowship.
 
 - **URL**: `/fellowship`
 - **Method**: `POST`
@@ -439,18 +467,18 @@ Creates a new fellowship.
   "churchId": "19d4e951c2324768b20d689e2fc1ce81",
   "name": "TUMAINI",
   "notes": "Tumaini fellowship",
-  "createdAt": "2025-03-05T05:10:38.000Z",
-  "updatedAt": "2025-03-05T05:11:45.000Z",
   "chairmanId": null,
   "deputyChairmanId": null,
   "secretaryId": null,
-  "treasurerId": null
+  "treasurerId": null,
+  "createdAt": "2025-03-05T05:10:38.000Z",
+  "updatedAt": "2025-03-05T05:10:38.000Z"
 }
 ```
 
 ### Update Fellowship
 
-Updates an existing fellowship.
+Updates an existing fellowship. This endpoint can be used to update fellowship details and assign leadership roles. All leadership roles (chairman, deputy chairman, secretary, treasurer) must be assigned to members who belong to this fellowship.
 
 - **URL**: `/fellowship/:id`
 - **Method**: `PATCH`
@@ -462,7 +490,11 @@ Updates an existing fellowship.
 ```json
 {
   "name": "TUMAINI",
-  "notes": "Tumaini fellowship"
+  "notes": "Tumaini fellowship",
+  "chairmanId": "1d4b928612524eaa93c3d84ecf433ef2",
+  "secretaryId": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+  "treasurerId": null,
+  "deputyChairmanId": null
 }
 ```
 
@@ -477,14 +509,88 @@ Updates an existing fellowship.
   "churchId": "19d4e951c2324768b20d689e2fc1ce81",
   "name": "TUMAINI",
   "notes": "Tumaini fellowship",
+  "chairmanId": "1d4b928612524eaa93c3d84ecf433ef2",
+  "deputyChairmanId": null,
+  "secretaryId": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+  "treasurerId": null,
   "createdAt": "2025-03-05T05:10:38.000Z",
   "updatedAt": "2025-03-05T05:11:45.000Z",
-  "chairmanId": null,
-  "deputyChairmanId": null,
-  "secretaryId": null,
-  "treasurerId": null
+  "chairman": {
+    "id": "1d4b928612524eaa93c3d84ecf433ef2",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phoneNumber": "255712345678"
+    // Other member fields...
+  },
+  "secretary": {
+    "id": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "phoneNumber": "255723456789"
+    // Other member fields...
+  }
 }
 ```
+
+#### Error Responses
+
+- **Code**: 400 Bad Request
+
+  - This status code indicates validation errors, such as assigning a member who does not belong to this fellowship as a leader
+  - **Content**:
+    ```json
+    {
+      "statusCode": 400,
+      "message": {
+        "chairmanId": "Member must belong to this fellowship to be assigned as chairman"
+      },
+      "error": "Bad Request"
+    }
+    ```
+
+- **Code**: 404 Not Found
+  - This status code indicates that the fellowship does not exist or does not belong to the current church
+  - **Content**:
+    ```json
+    {
+      "statusCode": 404,
+      "message": "Not Found"
+    }
+    ```
+
+### Delete Fellowship
+
+Deletes a fellowship.
+
+- **URL**: `/fellowship/:id`
+- **Method**: `DELETE`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `fellowship.deleteById`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "3ebc4ece469349e294b196f69e424ef9",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "TUMAINI",
+  "notes": "Tumaini fellowship",
+  "chairmanId": "1d4b928612524eaa93c3d84ecf433ef2",
+  "deputyChairmanId": null,
+  "secretaryId": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+  "treasurerId": null,
+  "createdAt": "2025-03-05T05:10:38.000Z",
+  "updatedAt": "2025-03-05T05:11:45.000Z"
+}
+```
+
+#### Error Response
+
+- **Code**: 404 Not Found
+  - This status code indicates that the fellowship does not exist or does not belong to the current church
 
 ## Members
 
@@ -494,14 +600,14 @@ Endpoints for managing church members.
 
 The following table shows all possible values for enumerated fields in the member schema:
 
-| Field | Possible Values |
-|-------|----------------|
-| Gender | "Male", "Female" |
-| Marital Status | "Single", "Married", "Separated", "Divorced" |
-| Marriage Type | "Christian", "Non-Christian" |
-| Education Level | "Informal", "Primary", "Secondary", "Certificate", "Diploma", "Bachelors", "Masters", "Doctorate", "Other" |
-| Member Role | "Clergy", "Staff", "Regular", "Leader", "Volunteer" |
-| Dependant Relationship | "Child", "House Helper", "Relative", "Parent", "Sibling", "Grandchild", "Grandparent", "Niece/Nephew", "Guardian", "Ward", "Spouse", "In-Law", "Extended Family", "Other" |                                                       |
+| Field                  | Possible Values                                                                                                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| Gender                 | "Male", "Female"                                                                                                                                                          |
+| Marital Status         | "Single", "Married", "Separated", "Divorced"                                                                                                                              |
+| Marriage Type          | "Christian", "Non-Christian"                                                                                                                                              |
+| Education Level        | "Informal", "Primary", "Secondary", "Certificate", "Diploma", "Bachelors", "Masters", "Doctorate", "Other"                                                                |
+| Member Role            | "Clergy", "Staff", "Regular", "Leader", "Volunteer"                                                                                                                       |
+| Dependant Relationship | "Child", "House Helper", "Relative", "Parent", "Sibling", "Grandchild", "Grandparent", "Niece/Nephew", "Guardian", "Ward", "Spouse", "In-Law", "Extended Family", "Other" |     |
 
 ### Get All Members
 
