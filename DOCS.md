@@ -9,12 +9,13 @@ This document outlines all available API endpoints, request/response formats, an
 3. [Churches](#churches)
 4. [Fellowships](#fellowships)
 5. [Members](#members)
-6. [Roles](#roles)
-7. [Error Handling](#error-handling)
+6. [Volunteer Opportunities](#volunteer-opportunities)
+7. [Roles](#roles)
+8. [Error Handling](#error-handling)
 
 ## Authentication
 
-Authentication is required for most endpoints. The API uses token-based authentication. 
+Authentication is required for most endpoints. The API uses token-based authentication.
 
 All endpoints (except `/auth/login`) require a Bearer token in the Authorization header:
 
@@ -228,16 +229,16 @@ Creates a new user.
 
 ```json
 {
-	"id": "790ed7d77d3940489343a06e719fe7db",
-	"name": "John Solomon",
-	"email": "john.solomon@mychurch.com",
-	"phoneNumber": "255786908766",
-	"churchId": "ef134982fbc34987b25d6cd8dda2561b",
-	"roleId": "0aab9ef85f46477396a300479a3f06b9",
-	"isActive": 1,
-	"isDeleted": 0,
-	"createdAt": "2025-03-01T14:25:40.000Z",
-	"updatedAt": "2025-03-01T14:39:36.000Z"
+  "id": "790ed7d77d3940489343a06e719fe7db",
+  "name": "John Solomon",
+  "email": "john.solomon@mychurch.com",
+  "phoneNumber": "255786908766",
+  "churchId": "ef134982fbc34987b25d6cd8dda2561b",
+  "roleId": "0aab9ef85f46477396a300479a3f06b9",
+  "isActive": 1,
+  "isDeleted": 0,
+  "createdAt": "2025-03-01T14:25:40.000Z",
+  "updatedAt": "2025-03-01T14:39:36.000Z"
 }
 ```
 
@@ -266,16 +267,16 @@ Updates an existing user.
 
 ```json
 {
-	"id": "790ed7d77d3940489343a06e719fe7db",
-	"name": "James Kisamo",
-	"email": "james.kisamo@mychurch.com",
-	"phoneNumber": "255786908766",
-	"churchId": "ef134982fbc34987b25d6cd8dda2561b",
-	"roleId": "0aab9ef85f46477396a300479a3f06b9",
-	"isActive": 1,
-	"isDeleted": 0,
-	"createdAt": "2025-03-01T14:25:40.000Z",
-	"updatedAt": "2025-03-01T14:39:36.000Z"
+  "id": "790ed7d77d3940489343a06e719fe7db",
+  "name": "James Kisamo",
+  "email": "james.kisamo@mychurch.com",
+  "phoneNumber": "255786908766",
+  "churchId": "ef134982fbc34987b25d6cd8dda2561b",
+  "roleId": "0aab9ef85f46477396a300479a3f06b9",
+  "isActive": 1,
+  "isDeleted": 0,
+  "createdAt": "2025-03-01T14:25:40.000Z",
+  "updatedAt": "2025-03-01T14:39:36.000Z"
 }
 ```
 
@@ -295,16 +296,16 @@ Deletes a user (soft delete).
 
 ```json
 {
-	"id": "790ed7d77d3940489343a06e719fe7db",
-	"name": "James Kisamo",
-	"email": "james.kisamo@mychurch.com",
-	"phoneNumber": "255786908766",
-	"churchId": "ef134982fbc34987b25d6cd8dda2561b",
-	"roleId": "0aab9ef85f46477396a300479a3f06b9",
-	"isActive": 1,
-	"isDeleted": 0,
-	"createdAt": "2025-03-01T14:25:40.000Z",
-	"updatedAt": "2025-03-01T14:39:36.000Z"
+  "id": "790ed7d77d3940489343a06e719fe7db",
+  "name": "James Kisamo",
+  "email": "james.kisamo@mychurch.com",
+  "phoneNumber": "255786908766",
+  "churchId": "ef134982fbc34987b25d6cd8dda2561b",
+  "roleId": "0aab9ef85f46477396a300479a3f06b9",
+  "isActive": 1,
+  "isDeleted": 0,
+  "createdAt": "2025-03-01T14:25:40.000Z",
+  "updatedAt": "2025-03-01T14:39:36.000Z"
 }
 ```
 
@@ -327,14 +328,14 @@ Retrieves the church information associated with the currently authenticated use
 
 ```json
 {
-	"id": "19d4e951c2324768b20d689e2fc1ce81",
-	"name": "My Church",
-	"domainName": "mychurch.com",
-	"registrationNumber": "CHURCH-0001",
-	"contactPhone": "1234567890",
-	"contactEmail": "contact@mychurch.com",
-	"createdAt": "2025-03-04T01:36:07.000Z",
-	"updatedAt": "2025-03-04T01:36:07.000Z"
+  "id": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "My Church",
+  "domainName": "mychurch.com",
+  "registrationNumber": "CHURCH-0001",
+  "contactPhone": "1234567890",
+  "contactEmail": "contact@mychurch.com",
+  "createdAt": "2025-03-04T01:36:07.000Z",
+  "updatedAt": "2025-03-04T01:36:07.000Z"
 }
 ```
 
@@ -495,11 +496,12 @@ The following table shows all possible values for enumerated fields in the membe
 
 | Field | Possible Values |
 |-------|----------------|
-| gender | "Male", "Female" |
-| maritalStatus | "Single", "Married", "Separated", "Divorced" |
-| marriageType | "Christian", "Non-Christian" |
-| educationLevel | "Informal", "Primary", "Secondary", "Certificate", "Diploma", "Bachelors", "Masters", "Doctorate", "Other" |
-| memberRole | "Clergy", "Staff", "Regular", "Leader", "Volunteer" |
+| Gender | "Male", "Female" |
+| Marital Status | "Single", "Married", "Separated", "Divorced" |
+| Marriage Type | "Christian", "Non-Christian" |
+| Education Level | "Informal", "Primary", "Secondary", "Certificate", "Diploma", "Bachelors", "Masters", "Doctorate", "Other" |
+| Member Role | "Clergy", "Staff", "Regular", "Leader", "Volunteer" |
+| Dependant Relationship | "Child", "House Helper", "Relative", "Parent", "Sibling", "Grandchild", "Grandparent", "Niece/Nephew", "Guardian", "Ward", "Spouse", "In-Law", "Extended Family", "Other" |                                                       |
 
 ### Get All Members
 
@@ -557,7 +559,30 @@ Retrieves a list of all members belonging to the current church.
     "attendsFellowship": 1,
     "fellowshipAbsenceReason": null,
     "createdAt": "2025-03-07T04:41:29.000Z",
-    "updatedAt": "2025-03-07T04:41:29.000Z"
+    "updatedAt": "2025-03-07T04:41:29.000Z",
+    "dependants": [
+      {
+        "id": "b9a57f0991bc42b9985b61c2231d166d",
+        "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+        "memberId": "1d4b928612524eaa93c3d84ecf433ef2",
+        "firstName": "Michael",
+        "lastName": "Doe",
+        "dateOfBirth": "2015-03-10T00:00:00.000Z",
+        "relationship": "Child",
+        "createdAt": "2025-03-07T04:41:29.000Z",
+        "updatedAt": "2025-03-07T04:41:29.000Z"
+      }
+    ],
+    "interests": [
+      {
+        "id": "cdd519e8cec247aca455ec05faccfad2",
+        "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+        "name": "Main Choir",
+        "description": null,
+        "createdAt": "2025-03-07T04:41:29.000Z",
+        "updatedAt": "2025-03-07T04:41:29.000Z"
+      }
+    ]
   }
   // More members...
 ]
@@ -616,7 +641,41 @@ Retrieves a specific member by ID.
   "attendsFellowship": 1,
   "fellowshipAbsenceReason": null,
   "createdAt": "2025-03-07T04:41:29.000Z",
-  "updatedAt": "2025-03-07T04:41:29.000Z"
+  "updatedAt": "2025-03-07T04:41:29.000Z",
+  "dependants": [
+    {
+      "id": "b9a57f0991bc42b9985b61c2231d166d",
+      "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+      "memberId": "1d4b928612524eaa93c3d84ecf433ef2",
+      "firstName": "Michael",
+      "lastName": "Doe",
+      "dateOfBirth": "2015-03-10T00:00:00.000Z",
+      "relationship": "Child",
+      "createdAt": "2025-03-07T04:41:29.000Z",
+      "updatedAt": "2025-03-07T04:41:29.000Z"
+    },
+    {
+      "id": "c0b68e1a2c3d4e5f6a7b8c9d0e1f2g3h",
+      "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+      "memberId": "1d4b928612524eaa93c3d84ecf433ef2",
+      "firstName": "Sarah",
+      "lastName": "Doe",
+      "dateOfBirth": "2018-07-22T00:00:00.000Z",
+      "relationship": "Child",
+      "createdAt": "2025-03-07T04:41:29.000Z",
+      "updatedAt": "2025-03-07T04:41:29.000Z"
+    }
+  ],
+  "interests": [
+    {
+      "id": "cdd519e8cec247aca455ec05faccfad2",
+      "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+      "name": "Main Choir",
+      "description": null,
+      "createdAt": "2025-03-07T04:41:29.000Z",
+      "updatedAt": "2025-03-07T04:41:29.000Z"
+    }
+  ]
 }
 ```
 
@@ -666,71 +725,22 @@ Creates a new member.
   "nearestMemberName": "James Wilson",
   "nearestMemberPhone": "+255723456789",
   "attendsFellowship": true,
-  "fellowshipAbsenceReason": null
-}
-```
-
-#### Success Response
-
-- **Code**: 201 Created
-- **Content**:
-
-```json
-{
-  "id": "1d4b928612524eaa93c3d84ecf433ef2",
-  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "envelopeNumber": "1245",
-  "firstName": "John",
-  "middleName": "Michael",
-  "lastName": "Doe",
-  "gender": "Male",
-  "dateOfBirth": "1985-06-14T21:00:00.000Z",
-  "placeOfBirth": "Dar es Salaam",
-  "profilePhoto": "https://example.com/photos/john-doe.jpg",
-  "maritalStatus": "Married",
-  "marriageType": "Christian",
-  "dateOfMarriage": "2010-09-21T21:00:00.000Z",
-  "spouseName": "Sarah Doe",
-  "placeOfMarriage": "Arusha",
-  "phoneNumber": "255712345678",
-  "email": "john.doe@example.com",
-  "spousePhoneNumber": "255798765432",
-  "residenceNumber": "Block 5, House 23",
-  "residenceBlock": "Mikocheni B",
-  "postalBox": "P.O. Box 12345",
-  "residenceArea": "Mikocheni",
-  "formerChurch": "Grace Community Church",
-  "occupation": "Software Engineer",
-  "placeOfWork": "Tech Solutions Ltd",
-  "educationLevel": "Bachelors",
-  "profession": "Computer Science",
-  "memberRole": "Regular",
-  "isBaptized": 1,
-  "isConfirmed": 1,
-  "partakesLordSupper": 1,
-  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
-  "nearestMemberName": "James Wilson",
-  "nearestMemberPhone": "+255723456789",
-  "attendsFellowship": 1,
   "fellowshipAbsenceReason": null,
-  "createdAt": "2025-03-07T04:41:29.000Z",
-  "updatedAt": "2025-03-07T04:41:29.000Z"
-}
-```
-
-#### Error Response
-
-- **Code**: 400 Bad Request
-- **Content**:
-
-```json
-{
-  "statusCode": 400,
-  "message": "Validation failed",
-  "error": "Validation Error",
-  "details": {
-    "fellowshipId": "\"fellowshipId\" is required"
-  }
+  "dependants": [
+    {
+      "firstName": "Michael",
+      "lastName": "Doe",
+      "dateOfBirth": "2015-03-10",
+      "relationship": "Child"
+    },
+    {
+      "firstName": "Sarah",
+      "lastName": "Doe",
+      "dateOfBirth": "2018-07-22",
+      "relationship": "Child"
+    }
+  ],
+  "interests": ["cdd519e8cec247aca455ec05faccfad2"]
 }
 ```
 
@@ -750,55 +760,24 @@ Updates an existing member.
   "firstName": "John",
   "lastName": "Smith",
   "phoneNumber": "255712345678",
-  "email": "john.smith@example.com"
-}
-```
-
-#### Success Response
-
-- **Code**: 200 OK
-- **Content**:
-
-```json
-{
-  "id": "1d4b928612524eaa93c3d84ecf433ef2",
-  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "envelopeNumber": "1245",
-  "firstName": "John",
-  "middleName": "Michael",
-  "lastName": "Smith",
-  "gender": "Male",
-  "dateOfBirth": "1985-06-14T21:00:00.000Z",
-  "placeOfBirth": "Dar es Salaam",
-  "profilePhoto": "https://example.com/photos/john-doe.jpg",
-  "maritalStatus": "Married",
-  "marriageType": "Christian",
-  "dateOfMarriage": "2010-09-21T21:00:00.000Z",
-  "spouseName": "Sarah Doe",
-  "placeOfMarriage": "Arusha",
-  "phoneNumber": "255712345678",
   "email": "john.smith@example.com",
-  "spousePhoneNumber": "255798765432",
-  "residenceNumber": "Block 5, House 23",
-  "residenceBlock": "Mikocheni B",
-  "postalBox": "P.O. Box 12345",
-  "residenceArea": "Mikocheni",
-  "formerChurch": "Grace Community Church",
-  "occupation": "Software Engineer",
-  "placeOfWork": "Tech Solutions Ltd",
-  "educationLevel": "Bachelors",
-  "profession": "Computer Science",
-  "memberRole": "Regular",
-  "isBaptized": 1,
-  "isConfirmed": 1,
-  "partakesLordSupper": 1,
-  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
-  "nearestMemberName": "James Wilson",
-  "nearestMemberPhone": "+255723456789",
-  "attendsFellowship": 1,
-  "fellowshipAbsenceReason": null,
-  "createdAt": "2025-03-07T04:41:29.000Z",
-  "updatedAt": "2025-03-07T05:15:42.000Z"
+  "dependants": [
+    {
+      "id": "b9a57f0991bc42b9985b61c2231d166d",
+      "firstName": "Michael",
+      "lastName": "Smith"
+    }
+  ],
+  "addDependants": [
+    {
+      "firstName": "Emma",
+      "lastName": "Smith",
+      "dateOfBirth": "2020-05-15",
+      "relationship": "Child"
+    }
+  ],
+  "removeDependantIds": ["c0b68e1a2c3d4e5f6a7b8c9d0e1f2g3h"],
+  "interests": ["cdd519e8cec247aca455ec05faccfad2"]
 }
 ```
 
@@ -814,48 +793,155 @@ Deletes a member.
 #### Success Response
 
 - **Code**: 200 OK
+- **Content**: Deleted member object
+
+## Volunteer Opportunities
+
+Endpoints for managing volunteer opportunities.
+
+### Get All Opportunities
+
+Retrieves a list of all volunteer opportunities.
+
+- **URL**: `/opportunity`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.findAll`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+[
+  {
+    "id": "cdd519e8cec247aca455ec05faccfad2",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "name": "Main Choir",
+    "description": null,
+    "createdAt": "2025-03-08T08:51:36.000Z",
+    "updatedAt": "2025-03-08T08:54:31.000Z"
+  }
+  // More opportunities...
+]
+```
+
+### Get Opportunity by ID
+
+Retrieves a specific volunteer opportunity by ID.
+
+- **URL**: `/opportunity/:id`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.findById`
+
+#### Success Response
+
+- **Code**: 200 OK
 - **Content**:
 
 ```json
 {
-  "id": "1d4b928612524eaa93c3d84ecf433ef2",
+  "id": "cdd519e8cec247aca455ec05faccfad2",
   "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "envelopeNumber": "1245",
-  "firstName": "John",
-  "middleName": "Michael",
-  "lastName": "Smith",
-  "gender": "Male",
-  "dateOfBirth": "1985-06-14T21:00:00.000Z",
-  "placeOfBirth": "Dar es Salaam",
-  "profilePhoto": "https://example.com/photos/john-doe.jpg",
-  "maritalStatus": "Married",
-  "marriageType": "Christian",
-  "dateOfMarriage": "2010-09-21T21:00:00.000Z",
-  "spouseName": "Sarah Doe",
-  "placeOfMarriage": "Arusha",
-  "phoneNumber": "255712345678",
-  "email": "john.smith@example.com",
-  "spousePhoneNumber": "255798765432",
-  "residenceNumber": "Block 5, House 23",
-  "residenceBlock": "Mikocheni B",
-  "postalBox": "P.O. Box 12345",
-  "residenceArea": "Mikocheni",
-  "formerChurch": "Grace Community Church",
-  "occupation": "Software Engineer",
-  "placeOfWork": "Tech Solutions Ltd",
-  "educationLevel": "Bachelors",
-  "profession": "Computer Science",
-  "memberRole": "Regular",
-  "isBaptized": 1,
-  "isConfirmed": 1,
-  "partakesLordSupper": 1,
-  "fellowshipId": "3ebc4ece469349e294b196f69e424ef9",
-  "nearestMemberName": "James Wilson",
-  "nearestMemberPhone": "+255723456789",
-  "attendsFellowship": 1,
-  "fellowshipAbsenceReason": null,
-  "createdAt": "2025-03-07T04:41:29.000Z",
-  "updatedAt": "2025-03-07T05:15:42.000Z"
+  "name": "Main Choir",
+  "description": null,
+  "createdAt": "2025-03-08T08:51:36.000Z",
+  "updatedAt": "2025-03-08T08:54:31.000Z"
+}
+```
+
+### Create Opportunity
+
+Creates a new volunteer opportunity.
+
+- **URL**: `/opportunity`
+- **Method**: `POST`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.create`
+
+#### Request Body
+
+```json
+{
+  "name": "Children's Choir Assistant",
+  "description": "Assist the music director in organizing and leading rehearsals for the children's choir."
+}
+```
+
+#### Success Response
+
+- **Code**: 201 Created
+- **Content**:
+
+```json
+{
+  "id": "cdd519e8cec247aca455ec05faccfad2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "Children's Choir Assistant",
+  "description": "Assist the music director in organizing and leading rehearsals for the children's choir.",
+  "createdAt": "2025-03-08T08:51:36.000Z",
+  "updatedAt": "2025-03-08T08:51:36.000Z"
+}
+```
+
+### Update Opportunity
+
+Updates an existing volunteer opportunity.
+
+- **URL**: `/opportunity/:id`
+- **Method**: `PATCH`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.update`
+
+#### Request Body
+
+```json
+{
+  "name": "Main Choir Leader",
+  "description": "Lead the church's main choir during Sunday services and special events."
+}
+```
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "cdd519e8cec247aca455ec05faccfad2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "Main Choir Leader",
+  "description": "Lead the church's main choir during Sunday services and special events.",
+  "createdAt": "2025-03-08T08:51:36.000Z",
+  "updatedAt": "2025-03-08T08:54:31.000Z"
+}
+```
+
+### Delete Opportunity
+
+Deletes a volunteer opportunity.
+
+- **URL**: `/opportunity/:id`
+- **Method**: `DELETE`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.deleteById`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "cdd519e8cec247aca455ec05faccfad2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "Main Choir",
+  "description": null,
+  "createdAt": "2025-03-08T08:51:36.000Z",
+  "updatedAt": "2025-03-08T08:54:31.000Z"
 }
 ```
 
@@ -909,12 +995,12 @@ Retrieves a specific role by ID.
 
 ```json
 {
-	"id": "0fc03face2bc4e3aa9d8aa735458ebfc",
-	"name": "Admin",
-	"churchId": "19d4e951c2324768b20d689e2fc1ce81",
-	"description": null,
-	"createdAt": "2025-03-04T04:36:08.000Z",
-	"updatedAt": "2025-03-04T04:36:08.000Z"
+  "id": "0fc03face2bc4e3aa9d8aa735458ebfc",
+  "name": "Admin",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "description": null,
+  "createdAt": "2025-03-04T04:36:08.000Z",
+  "updatedAt": "2025-03-04T04:36:08.000Z"
 }
 ```
 

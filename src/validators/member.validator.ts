@@ -5,6 +5,7 @@ import { MaritalStatus } from 'src/types/marital.status';
 import { MarriageType } from 'src/types/marriage.type';
 import { EducationLevel } from 'src/types/education.level';
 import { MemberRole } from 'src/types/member.role';
+import { DependantRelationship } from 'src/types/dependant.relationship';
 
 export class CreateMemberValidator extends ValidatorPipe {
   constructor() {
@@ -58,6 +59,19 @@ export class CreateMemberValidator extends ValidatorPipe {
         nearestMemberPhone: Joi.string().allow(null),
         attendsFellowship: Joi.boolean().required(),
         fellowshipAbsenceReason: Joi.string().allow(null),
+        interests: Joi.array().items(Joi.string()).required(),
+        dependants: Joi.array()
+          .items(
+            Joi.object({
+              firstName: Joi.string().required(),
+              lastName: Joi.string().required(),
+              dateOfBirth: Joi.date().allow(null).optional(),
+              relationship: Joi.string()
+                .valid(...Object.values(DependantRelationship))
+                .required(),
+            }),
+          )
+          .optional(),
       }),
     );
   }
@@ -118,6 +132,36 @@ export class UpdateMemberValidator extends ValidatorPipe {
         nearestMemberPhone: Joi.string().allow(null).optional(),
         attendsFellowship: Joi.boolean().optional(),
         fellowshipAbsenceReason: Joi.string().allow(null).optional(),
+        interests: Joi.array().items(Joi.string()).optional(),
+        dependants: Joi.array()
+          .items(
+            Joi.object({
+              id: Joi.string().required(),
+              firstName: Joi.string().required(),
+              lastName: Joi.string().required(),
+              dateOfBirth: Joi.alternatives()
+                .try(Joi.date(), Joi.string())
+                .allow(null)
+                .optional(),
+              relationship: Joi.string()
+                .valid(...Object.values(DependantRelationship))
+                .required(),
+            }),
+          )
+          .optional(),
+        addDependants: Joi.array()
+          .items(
+            Joi.object({
+              firstName: Joi.string().required(),
+              lastName: Joi.string().required(),
+              dateOfBirth: Joi.date().allow(null).optional(),
+              relationship: Joi.string()
+                .valid(...Object.values(DependantRelationship))
+                .required(),
+            }),
+          )
+          .optional(),
+        removeDependantIds: Joi.array().items(Joi.string()).optional(),
       }),
     );
   }

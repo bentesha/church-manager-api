@@ -99,6 +99,11 @@ exports.seed = async function (knex) {
     'member.create',
     'member.update',
     'member.deleteById',
+    'opportunity.findAll',
+    'opportunity.findById',
+    'opportunity.create',
+    'opportunity.update',
+    'opportunity.deleteById',
   ];
 
   // Recreate user roles

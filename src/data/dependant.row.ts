@@ -1,13 +1,13 @@
 import { DependantRelationship } from 'src/types/dependant.relationship';
 
-export interface Dependant {
+export interface DependantRow {
   id: string;
-  church_id: string;
-  member_id: string;
-  first_name: string;
-  last_name: string;
-  date_of_birth: string | null;
+  churchId: string;
+  memberId: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string | null;
   relationship: DependantRelationship;
-  created_at: Date | string;
-  updated_at: Date | string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }

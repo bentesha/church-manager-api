@@ -3,6 +3,24 @@ import { Gender } from 'src/types/gender';
 import { MaritalStatus } from 'src/types/marital.status';
 import { MarriageType } from 'src/types/marriage.type';
 import { MemberRole } from 'src/types/member.role';
+import { DependantRelationship } from 'src/types/dependant.relationship';
+
+// Interface for dependant data in DTOs
+export interface DependantDto {
+  firstName: string;
+  lastName: string;
+  dateOfBirth?: string | null;
+  relationship: DependantRelationship;
+}
+
+// Interface for updating dependant data
+export interface UpdateDependantDto {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string | null;
+  relationship?: DependantRelationship;
+}
 
 export interface CreateMemberDto {
   envelopeNumber: string | null;
@@ -39,6 +57,8 @@ export interface CreateMemberDto {
   nearestMemberPhone: string | null;
   attendsFellowship: boolean;
   fellowshipAbsenceReason: string | null;
+  interests?: string[];
+  dependants?: DependantDto[];
 }
 
 export interface UpdateMemberInfo {
@@ -76,4 +96,8 @@ export interface UpdateMemberInfo {
   nearestMemberPhone?: string | null;
   attendsFellowship?: boolean;
   fellowshipAbsenceReason?: string | null;
+  interests?: string[];
+  dependants?: UpdateDependantDto[];
+  addDependants?: DependantDto[];
+  removeDependantIds?: string[];
 }

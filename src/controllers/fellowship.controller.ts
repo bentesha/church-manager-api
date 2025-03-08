@@ -12,8 +12,10 @@ import {
 } from '@nestjs/common';
 import { Check } from 'src/decoractors/check.decorator';
 import { MyChurch } from 'src/decorators/my.church.decorator';
-import { CreateFellowshipDto } from 'src/dto/create.fellowship.dto';
-import { UpdateFellowshipDto } from 'src/dto/update.fellowship.dto';
+import {
+  CreateFellowshipDto,
+  UpdateFellowshipDto,
+} from 'src/dto/fellowship.dto';
 import { ValidationException } from 'src/exceptions/validation.exception';
 import { CheckGuard } from 'src/guards/check.guard';
 import { Church } from 'src/models/church.model';

@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Dependencies, Injectable } from '@nestjs/common';
 import findQuery from 'objection-find';
 import { MemberRow } from 'src/data/member.row';
 import { DateHelper } from 'src/helpers/date.helper';
 import { IdHelper } from 'src/helpers/id.helper';
 import { Member } from 'src/models/member.model';
+import { Dependant } from 'src/models/dependant.model';
 import { Gender } from 'src/types/gender';
 import { MarriageType } from 'src/types/marriage.type';
 import { MaritalStatus } from 'src/types/marital.status';
 import { MemberRole } from 'src/types/member.role';
 import { EducationLevel } from 'src/types/education.level';
+import { VolunteerInterest } from 'src/models/volunteer.interest';
+import { DependantDto, UpdateDependantDto } from 'src/dto/member.dto';
 
 export interface CreateMemberInfo {
   churchId: string;
@@ -46,6 +49,8 @@ export interface CreateMemberInfo {
   nearestMemberPhone: string | null;
   attendsFellowship: boolean;
   fellowshipAbsenceReason: string | null;
+  interests?: Array<string>;
+  dependants?: DependantDto[];
 }
 
 export interface UpdateMemberInfo {
@@ -84,6 +89,10 @@ export interface UpdateMemberInfo {
   nearestMemberPhone?: string | null;
   attendsFellowship?: boolean;
   fellowshipAbsenceReason?: string | null;
+  interests?: Array<string>;
+  dependants?: UpdateDependantDto[];
+  addDependants?: DependantDto[];
+  removeDependantIds?: string[];
 }
 
 @Injectable()
@@ -94,12 +103,16 @@ export class MemberService {
   ) {}
 
   /**
-   * Finds a member by their ID.
+   * Finds a member by their ID with related records.
    * @param id - The member's unique identifier.
    * @returns The member record or undefined if not found.
    */
   async findById(id: string): Promise<Member | undefined> {
-    return Member.query().findById(id);
+    const query = Member.query()
+      .withGraphFetched('[interests, dependants]')
+      .findById(id);
+
+    return query;
   }
 
   /**
@@ -108,7 +121,11 @@ export class MemberService {
    * @returns The first matching member or undefined.
    */
   async findOne(query: Partial<MemberRow>): Promise<Member | undefined> {
-    return findQuery(Member).allowAll(true).build(query).first();
+    return findQuery(Member)
+      .allowEager('[interests, dependants, fellowship]')!
+      .allowAll(true)
+      .build(query)
+      .first();
   }
 
   /**
@@ -124,10 +141,11 @@ export class MemberService {
    * Creates a new member record in the database.
    * @param info - The member details to be saved.
    * @returns The created member record.
-   *
-   * @note Consider using transactions to ensure consistency in case of failures.
    */
   async create(info: CreateMemberInfo): Promise<Member> {
+    // Extract interests and dependants from the info object
+    const { interests, dependants } = info;
+
     const row: MemberRow = {
       id: this.idHelper.generate(),
       churchId: info.churchId,
@@ -169,10 +187,49 @@ export class MemberService {
       updatedAt: this.dateHelper.formatDateTime(),
     };
 
-    // Consider wrapping in a transaction for data consistency
-    await Member.query().insert(row as any);
-    const member = await this.findById(row.id);
-    return member!;
+    // Use a transaction to ensure member and related records are created consistently
+    const member = await Member.transaction(async (trx) => {
+      // Insert the member
+      const createdMember = await Member.query(trx).insert(row as any);
+
+      // Handle interests sequentially
+      if (interests && interests.length > 0) {
+        const timestamp = this.dateHelper.formatDateTime();
+        for (const opportunityId of interests) {
+          await VolunteerInterest.query().transacting(trx).insert({
+            memberId: createdMember.id,
+            opportunityId,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          });
+        }
+      }
+
+      // Handle dependants sequentially
+      if (dependants && dependants.length > 0) {
+        const timestamp = this.dateHelper.formatDateTime();
+        for (const dep of dependants) {
+          await Dependant.query()
+            .transacting(trx)
+            .insert({
+              id: this.idHelper.generate(),
+              churchId: row.churchId,
+              memberId: createdMember.id,
+              firstName: dep.firstName,
+              lastName: dep.lastName,
+              dateOfBirth: dep.dateOfBirth || null,
+              relationship: dep.relationship,
+              createdAt: timestamp,
+              updatedAt: timestamp,
+            });
+        }
+      }
+
+      return createdMember!;
+    })!;
+
+    // Return member with related records loaded
+    return (await this.findById(member.id))!;
   }
 
   /**
@@ -180,13 +237,14 @@ export class MemberService {
    * @param id - The member ID to update.
    * @param info - The fields to be updated.
    * @returns The updated member record or undefined if not found.
-   *
-   * @note Logging should be added to track updates for auditing purposes.
    */
   async update(
     id: string,
     info: UpdateMemberInfo,
   ): Promise<Member | undefined> {
+    // Extract interests and dependant-related info
+    const { interests, dependants, addDependants, removeDependantIds } = info;
+
     const updates: Partial<MemberRow> = {
       churchId: info.churchId,
       envelopeNumber: info.envelopeNumber,
@@ -226,23 +284,91 @@ export class MemberService {
       updatedAt: this.dateHelper.formatDateTime(),
     };
 
-    // Filter out undefined properties to only update what was provided
+    // Filter out undefined properties
     Object.keys(updates).forEach((key) => {
       if (updates[key] === undefined) {
         delete updates[key];
       }
     });
 
-    await Member.query().where({ id }).update(updates);
-    return this.findById(id);
+    await Member.transaction(async (trx) => {
+      // Update member's basic information
+      await Member.query(trx).where({ id }).update(updates);
+
+      // Handle interests sequentially
+      if (interests !== undefined) {
+        // First, delete existing interests
+        await VolunteerInterest.query()
+          .transacting(trx)
+          .where({ memberId: id })
+          .delete();
+
+        // Then insert new interests sequentially
+        if (interests && interests.length > 0) {
+          const timestamp = this.dateHelper.formatDateTime();
+          for (const opportunityId of interests) {
+            await VolunteerInterest.query().transacting(trx).insert({
+              memberId: id,
+              opportunityId,
+              createdAt: timestamp,
+              updatedAt: timestamp,
+            });
+          }
+        }
+      }
+
+      // Handle dependants
+      // Remove specified dependants
+      if (removeDependantIds && removeDependantIds.length > 0) {
+        await Dependant.query(trx).whereIn('id', removeDependantIds).delete();
+      }
+
+      // Add new dependants sequentially
+      if (addDependants && addDependants.length > 0) {
+        const timestamp = this.dateHelper.formatDateTime();
+        for (const dep of addDependants) {
+          await Dependant.query(trx).insert({
+            id: this.idHelper.generate(),
+            churchId: updates.churchId,
+            memberId: id,
+            firstName: dep.firstName,
+            lastName: dep.lastName,
+            dateOfBirth: dep.dateOfBirth ?? null,
+            relationship: dep.relationship,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          });
+        }
+      }
+
+      // Update existing dependants sequentially
+      if (dependants && dependants.length > 0) {
+        const timestamp = this.dateHelper.formatDateTime();
+        for (const dep of dependants) {
+          if (!dep.id) continue; // Skip if no ID provided
+
+          await Dependant.query(trx)
+            .where({ id: dep.id, memberId: id })
+            .update({
+              firstName: dep.firstName,
+              lastName: dep.lastName,
+              dateOfBirth: dep.dateOfBirth,
+              relationship: dep.relationship,
+              updatedAt: timestamp,
+            });
+        }
+      }
+    });
+
+    // Return the updated member with all relations
+    const member = await this.findById(id);
+    return member!;
   }
 
   /**
    * Deletes a member record by its ID.
    * @param id - The member ID to delete.
    * @returns The deleted member record, or undefined if not found.
-   *
-   * @note Instead of hard deletion, consider adding a soft delete flag (e.g., isDeleted column).
    */
   async delete(id: string): Promise<Member | undefined> {
     const member = await this.findById(id);
@@ -251,19 +377,24 @@ export class MemberService {
       return undefined; // Member not found
     }
 
-    // Instead of deleting, consider updating an `isDeleted` flag
-    // await Member.query().where({ id }).update({ isDeleted: true });
+    return Member.transaction(async (trx) => {
+      // Delete all interest relations
+      await VolunteerInterest.query(trx).where({ memberId: id }).delete();
 
-    await Member.query().deleteById(id);
-    return member;
+      // Delete all dependants
+      await Dependant.query(trx).where({ memberId: id }).delete();
+
+      // Delete the member
+      await Member.query(trx).deleteById(id);
+
+      return member;
+    });
   }
 
-  /**
-   * Finds members that belong to a specific fellowship.
-   * @param fellowshipId - The fellowship ID to filter by.
-   * @returns A list of members in the specified fellowship.
-   */
-  async findByFellowship(fellowshipId: string): Promise<Array<Member>> {
-    return Member.query().where({ fellowshipId });
+  async findDependantById(
+    dependantId: string,
+    memberId: string,
+  ): Promise<Dependant | undefined> {
+    return Dependant.query().findOne({ id: dependantId, memberId });
   }
 }

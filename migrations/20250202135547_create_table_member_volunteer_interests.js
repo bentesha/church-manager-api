@@ -7,7 +7,7 @@ exports.up = function (knex) {
     'member_volunteer_interests',
     function (table) {
       table.string('memberId').notNullable();
-      table.string('volunteerOpportunityId').notNullable();
+      table.string('opportunityId').notNullable();
       table.primary(['memberId', 'volunteerOpportunityId']);
 
       table
@@ -17,7 +17,7 @@ exports.up = function (knex) {
         .onDelete('CASCADE');
 
       table
-        .foreign('volunteerOpportunityId')
+        .foreign('opportunityId')
         .references('id')
         .inTable('volunteer_opportunities')
         .onDelete('CASCADE');
