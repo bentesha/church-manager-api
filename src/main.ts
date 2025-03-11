@@ -3,9 +3,11 @@ import { AppModule } from './app.module';
 import { Config } from './config';
 import { Model } from 'objection';
 import * as Knex from 'knex';
+import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(cors());
 
   // Configure database connection
   const config = app.get(Config);
