@@ -104,6 +104,15 @@ exports.seed = async function (knex) {
     'opportunity.create',
     'opportunity.update',
     'opportunity.deleteById',
+    'envelope.findAll',
+    'envelope.findById',
+    'envelope.findByNumber',
+    'envelope.findAvailable',
+    'envelope.create',
+    'envelope.delete',
+    'envelope.assign',
+    'envelope.release',
+    'envelope.getHistory',
   ];
 
   // Recreate user roles

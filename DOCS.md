@@ -11,7 +11,7 @@ This document outlines all available API endpoints, request/response formats, an
 5. [Members](#members)
 6. [Volunteer Opportunities](#volunteer-opportunities)
 7. [Roles](#roles)
-8. [Error Handling](#error-handling)
+8. [Envelopes](#envelopes)
 
 ## Authentication
 
@@ -901,18 +901,20 @@ Deletes a member.
 - **Code**: 200 OK
 - **Content**: Deleted member object
 
-## Volunteer Opportunities
+## Envelopes
 
-Endpoints for managing volunteer opportunities.
+Endpoints for managing church membership envelopes.
 
-### Get All Opportunities
+### Get All Envelopes
 
-Retrieves a list of all volunteer opportunities.
+Retrieves a list of all envelopes belonging to the current church.
 
-- **URL**: `/opportunity`
+- **URL**: `/envelope`
 - **Method**: `GET`
 - **Auth Required**: Yes (Bearer token)
-- **Required Permissions**: `opportunity.findAll`
+- **Required Permissions**: `envelope.findAll`
+- **Query Parameters**:
+  - Supports objection-find library query parameters for filtering
 
 #### Success Response
 
@@ -922,25 +924,57 @@ Retrieves a list of all volunteer opportunities.
 ```json
 [
   {
-    "id": "cdd519e8cec247aca455ec05faccfad2",
+    "id": "675e58e1d47942b5a287dacba2e841ea",
+    "envelopeNumber": 1,
     "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-    "name": "Main Choir",
-    "description": null,
-    "createdAt": "2025-03-08T08:51:36.000Z",
-    "updatedAt": "2025-03-08T08:54:31.000Z"
+    "memberId": "0e1f39c80d01465bb037d803042a2516",
+    "assignedAt": "2025-03-15T13:13:04.000Z",
+    "releasedAt": null,
+    "createdAt": "2025-03-15T13:02:45.000Z",
+    "updatedAt": "2025-03-15T13:13:04.000Z"
   }
-  // More opportunities...
+  // More envelopes...
 ]
 ```
 
-### Get Opportunity by ID
+### Get Available Envelopes
 
-Retrieves a specific volunteer opportunity by ID.
+Retrieves a list of the next 10 available envelopes (not assigned to any member) in ascending order by envelope number.
 
-- **URL**: `/opportunity/:id`
+- **URL**: `/envelope/available`
 - **Method**: `GET`
 - **Auth Required**: Yes (Bearer token)
-- **Required Permissions**: `opportunity.findById`
+- **Required Permissions**: `envelope.findAvailable`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+[
+  {
+    "id": "675e58e1d47942b5a287dacba2e841ea",
+    "envelopeNumber": 1,
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "memberId": null,
+    "assignedAt": null,
+    "releasedAt": "2025-03-15T13:40:55.000Z",
+    "createdAt": "2025-03-15T13:02:45.000Z",
+    "updatedAt": "2025-03-15T13:40:55.000Z"
+  }
+  // More envelopes...
+]
+```
+
+### Get Envelope by ID
+
+Retrieves a specific envelope by its ID.
+
+- **URL**: `/envelope/:id`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `envelope.findById`
 
 #### Success Response
 
@@ -949,30 +983,96 @@ Retrieves a specific volunteer opportunity by ID.
 
 ```json
 {
-  "id": "cdd519e8cec247aca455ec05faccfad2",
+  "id": "675e58e1d47942b5a287dacba2e841ea",
+  "envelopeNumber": 1,
   "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "name": "Main Choir",
-  "description": null,
-  "createdAt": "2025-03-08T08:51:36.000Z",
-  "updatedAt": "2025-03-08T08:54:31.000Z"
+  "memberId": "0e1f39c80d01465bb037d803042a2516",
+  "assignedAt": "2025-03-15T13:13:04.000Z",
+  "releasedAt": null,
+  "createdAt": "2025-03-15T13:02:45.000Z",
+  "updatedAt": "2025-03-15T13:13:04.000Z"
 }
 ```
 
-### Create Opportunity
+### Get Envelope by Number
 
-Creates a new volunteer opportunity.
+Retrieves a specific envelope by its number.
 
-- **URL**: `/opportunity`
+- **URL**: `/envelope/number/:number`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `envelope.findByNumber`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "675e58e1d47942b5a287dacba2e841ea",
+  "envelopeNumber": 1,
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "memberId": "0e1f39c80d01465bb037d803042a2516",
+  "assignedAt": "2025-03-15T13:13:04.000Z",
+  "releasedAt": null,
+  "createdAt": "2025-03-15T13:02:45.000Z",
+  "updatedAt": "2025-03-15T13:13:04.000Z"
+}
+```
+
+### Get Envelope Assignment History
+
+Retrieves the assignment history for a specific envelope.
+
+- **URL**: `/envelope/:id/history`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `envelope.getHistory`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+[
+  {
+    "id": "26a06fd05ad544f0beb073dd9135120b",
+    "envelopeId": "675e58e1d47942b5a287dacba2e841ea",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "memberId": "0e1f39c80d01465bb037d803042a2516",
+    "activityType": "RELEASE",
+    "activityAt": "2025-03-15T13:40:55.000Z",
+    "createdAt": "2025-03-15T13:40:55.000Z",
+    "updatedAt": "2025-03-15T13:40:55.000Z",
+    "member": {
+      "id": "0e1f39c80d01465bb037d803042a2516",
+      "firstName": "Sarah",
+      "lastName": "Mwakasege",
+      "phoneNumber": "255785623456"
+      // Other member fields omitted for brevity
+    }
+  }
+  // More history records...
+]
+```
+
+### Create Envelopes in Block
+
+Creates a block of envelopes with sequential numbers.
+
+- **URL**: `/envelope`
 - **Method**: `POST`
 - **Auth Required**: Yes (Bearer token)
-- **Required Permissions**: `opportunity.create`
+- **Required Permissions**: `envelope.create`
 
 #### Request Body
 
 ```json
 {
-  "name": "Children's Choir Assistant",
-  "description": "Assist the music director in organizing and leading rehearsals for the children's choir."
+  "startNumber": 1001,
+  "endNumber": 1100
 }
 ```
 
@@ -983,30 +1083,43 @@ Creates a new volunteer opportunity.
 
 ```json
 {
-  "id": "cdd519e8cec247aca455ec05faccfad2",
-  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "name": "Children's Choir Assistant",
-  "description": "Assist the music director in organizing and leading rehearsals for the children's choir.",
-  "createdAt": "2025-03-08T08:51:36.000Z",
-  "updatedAt": "2025-03-08T08:51:36.000Z"
+  "count": 100,
+  "startNumber": 1001,
+  "endNumber": 1100
 }
 ```
 
-### Update Opportunity
+#### Error Response
 
-Updates an existing volunteer opportunity.
+- **Code**: 400 Bad Request
+  - This status code indicates validation errors, such as overlapping with existing envelope numbers
+  - **Content**:
+    ```json
+    {
+      "statusCode": 400,
+      "message": "Validation failed",
+      "error": "Validation Error",
+      "details": {
+        "startNumber": "Envelope number range overlaps with existing envelopes"
+      }
+    }
+    ```
 
-- **URL**: `/opportunity/:id`
-- **Method**: `PATCH`
+### Delete Envelopes in Block
+
+Deletes a block of envelopes with sequential numbers. Only envelopes that have never been assigned to a member can be deleted.
+
+- **URL**: `/envelope`
+- **Method**: `DELETE`
 - **Auth Required**: Yes (Bearer token)
-- **Required Permissions**: `opportunity.update`
+- **Required Permissions**: `envelope.delete`
 
 #### Request Body
 
 ```json
 {
-  "name": "Main Choir Leader",
-  "description": "Lead the church's main choir during Sunday services and special events."
+  "startNumber": 1001,
+  "endNumber": 1100
 }
 ```
 
@@ -1017,169 +1130,127 @@ Updates an existing volunteer opportunity.
 
 ```json
 {
-  "id": "cdd519e8cec247aca455ec05faccfad2",
-  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "name": "Main Choir Leader",
-  "description": "Lead the church's main choir during Sunday services and special events.",
-  "createdAt": "2025-03-08T08:51:36.000Z",
-  "updatedAt": "2025-03-08T08:54:31.000Z"
+  "count": 100,
+  "startNumber": 1001,
+  "endNumber": 1100
 }
 ```
 
-### Delete Opportunity
-
-Deletes a volunteer opportunity.
-
-- **URL**: `/opportunity/:id`
-- **Method**: `DELETE`
-- **Auth Required**: Yes (Bearer token)
-- **Required Permissions**: `opportunity.deleteById`
-
-#### Success Response
-
-- **Code**: 200 OK
-- **Content**:
-
-```json
-{
-  "id": "cdd519e8cec247aca455ec05faccfad2",
-  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "name": "Main Choir",
-  "description": null,
-  "createdAt": "2025-03-08T08:51:36.000Z",
-  "updatedAt": "2025-03-08T08:54:31.000Z"
-}
-```
-
-## Roles
-
-Endpoints for managing roles and permissions.
-
-### Get All Roles
-
-Retrieves a list of all roles.
-
-- **URL**: `/role`
-- **Method**: `GET`
-- **Auth Required**: Yes
-- **Required Permissions**: `role.findAll`
-
-#### Success Response
-
-- **Code**: 200 OK
-- **Content**:
-
-```json
-{
-  "data": [
-    {
-      "id": "0fc03face2bc4e3aa9d8aa735458ebfc",
-      "name": "Admin",
-      "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-      "description": null,
-      "createdAt": "2025-03-04T04:36:08.000Z",
-      "updatedAt": "2025-03-04T04:36:08.000Z"
-    }
-    // More roles...
-  ]
-}
-```
-
-### Get Role by ID
-
-Retrieves a specific role by ID.
-
-- **URL**: `/role/:id`
-- **Method**: `GET`
-- **Auth Required**: Yes
-- **Required Permissions**: `role.findById`
-
-#### Success Response
-
-- **Code**: 200 OK
-- **Content**:
-
-```json
-{
-  "id": "0fc03face2bc4e3aa9d8aa735458ebfc",
-  "name": "Admin",
-  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
-  "description": null,
-  "createdAt": "2025-03-04T04:36:08.000Z",
-  "updatedAt": "2025-03-04T04:36:08.000Z"
-}
-```
-
-## Error Handling
-
-The API uses standard HTTP status codes to indicate the success or failure of requests.
-
-### Common Error Responses
-
-#### Unauthorized
-
-- **Code**: 401 Unauthorized
-- **Content**:
-
-```json
-{
-  "statusCode": 401,
-  "message": "Unauthorized access",
-  "error": "Unauthorized"
-}
-```
-
-#### Forbidden
-
-- **Code**: 403 Forbidden
-- **Content**:
-
-```json
-{
-  "statusCode": 403,
-  "message": "Insufficient permissions",
-  "error": "Forbidden"
-}
-```
-
-#### Not Found
-
-- **Code**: 404 Not Found
-- **Content**:
-
-```json
-{
-  "statusCode": 404,
-  "message": "Resource not found",
-  "error": "Not Found"
-}
-```
-
-#### Validation Error
+#### Error Response
 
 - **Code**: 400 Bad Request
+  - This status code indicates validation errors, such as trying to delete envelopes that have been assigned to members
+  - **Content**:
+    ```json
+    {
+      "statusCode": 400,
+      "message": "Validation failed",
+      "error": "Validation Error",
+      "details": {
+        "startNumber": "Cannot delete envelopes that have been assigned to members"
+      }
+    }
+    ```
+
+### Assign Envelope to Member
+
+Assigns an envelope to a member. The envelope must not be currently assigned to any member, and the member must not already have an envelope assigned.
+
+- **URL**: `/envelope/:id/assign`
+- **Method**: `POST`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `envelope.assign`
+
+#### Request Body
+
+```json
+{
+  "memberId": "0e1f39c80d01465bb037d803042a2516"
+}
+```
+
+#### Success Response
+
+- **Code**: 201 Created
 - **Content**:
 
 ```json
 {
-  "statusCode": 400,
-  "message": [
-    "email must be an email",
-    "password must be at least 6 characters"
-  ],
-  "error": "Bad Request"
+  "id": "675e58e1d47942b5a287dacba2e841ea",
+  "envelopeNumber": 1,
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "memberId": "0e1f39c80d01465bb037d803042a2516",
+  "assignedAt": "2025-03-15T13:13:04.000Z",
+  "releasedAt": null,
+  "createdAt": "2025-03-15T13:02:45.000Z",
+  "updatedAt": "2025-03-15T13:13:04.000Z"
 }
 ```
 
-#### Server Error
+#### Error Responses
 
-- **Code**: 500 Internal Server Error
+- **Code**: 400 Bad Request
+
+  - This status code indicates validation errors, such as the member not being found
+  - **Content**:
+    ```json
+    {
+      "statusCode": 400,
+      "message": "Validation failed",
+      "error": "Validation Error",
+      "details": {
+        "memberId": "Member with this id could not be found"
+      }
+    }
+    ```
+
+- **Code**: 409 Conflict
+  - This status code indicates the envelope is already assigned to another member
+  - **Content**:
+    ```json
+    {
+      "message": "Envelope is already assigned to a member",
+      "error": "Conflict",
+      "statusCode": 409
+    }
+    ```
+
+### Release Envelope from Member
+
+Releases an envelope from a member, making it available for assignment to another member.
+
+- **URL**: `/envelope/:id/release`
+- **Method**: `POST`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `envelope.release`
+
+#### Success Response
+
+- **Code**: 201 Created
 - **Content**:
 
 ```json
 {
-  "statusCode": 500,
-  "message": "Internal server error",
-  "error": "Internal Server Error"
+  "id": "675e58e1d47942b5a287dacba2e841ea",
+  "envelopeNumber": 1,
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "memberId": null,
+  "assignedAt": null,
+  "releasedAt": "2025-03-15T13:40:55.000Z",
+  "createdAt": "2025-03-15T13:02:45.000Z",
+  "updatedAt": "2025-03-15T13:40:55.000Z"
 }
 ```
+
+#### Error Response
+
+- **Code**: 409 Conflict
+  - This status code indicates the envelope is not currently assigned to any member
+  - **Content**:
+    ```json
+    {
+      "message": "Envelope is not currently assigned to any member",
+      "error": "Conflict",
+      "statusCode": 409
+    }
+    ```
