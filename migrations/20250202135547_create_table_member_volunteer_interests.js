@@ -8,7 +8,7 @@ exports.up = function (knex) {
     function (table) {
       table.string('memberId').notNullable();
       table.string('opportunityId').notNullable();
-      table.primary(['memberId', 'volunteerOpportunityId']);
+      table.primary(['memberId', 'opportunityId']);
 
       table
         .foreign('memberId')
