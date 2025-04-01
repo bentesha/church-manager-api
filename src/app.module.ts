@@ -23,10 +23,12 @@ import { OpportunityService } from './services/opportunity.service';
 import { OpportunityController } from './controllers/opportunity.controller';
 import { EnvelopeService } from './services/envelope.service';
 import { EnvelopeController } from './controllers/envelope.controller';
+import { EmailService } from './services/email.service';
+import { NotificationController } from './controllers/notification.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController, AuthController, RoleController, ChurchController, FellowshipController, MemberController, OpportunityController, EnvelopeController],
+  controllers: [AppController, UserController, AuthController, RoleController, ChurchController, FellowshipController, MemberController, OpportunityController, EnvelopeController, NotificationController],
   providers: [
     AppService,
     ChurchService,
@@ -42,6 +44,7 @@ import { EnvelopeController } from './controllers/envelope.controller';
     MemberService,
     OpportunityService,
     EnvelopeService,
+    EmailService,
   ],
 })
 export class AppModule {

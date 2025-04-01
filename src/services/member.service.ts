@@ -293,7 +293,9 @@ export class MemberService {
 
     await Member.transaction(async (trx) => {
       // Update member's basic information
-      await Member.query(trx).where({ id }).update(updates);
+      if (Object.keys(updates).length) {
+        await Member.query(trx).where({ id }).update(updates);
+      }
 
       // Handle interests sequentially
       if (interests !== undefined) {
@@ -326,10 +328,11 @@ export class MemberService {
       // Add new dependants sequentially
       if (addDependants && addDependants.length > 0) {
         const timestamp = this.dateHelper.formatDateTime();
+        const member = await Member.query(trx).findById(id);
         for (const dep of addDependants) {
           await Dependant.query(trx).insert({
             id: this.idHelper.generate(),
-            churchId: updates.churchId,
+            churchId: member!.churchId,
             memberId: id,
             firstName: dep.firstName,
             lastName: dep.lastName,

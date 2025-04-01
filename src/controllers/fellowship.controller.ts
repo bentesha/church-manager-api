@@ -9,7 +9,6 @@ import {
   Post,
   Query,
   UseGuards,
-  BadRequestException,
 } from '@nestjs/common';
 import { Check } from 'src/decoractors/check.decorator';
 import { MyChurch } from 'src/decorators/my.church.decorator';

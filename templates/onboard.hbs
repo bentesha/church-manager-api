@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Common styles for all emails */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .email-wrapper {
+            margin-bottom: 50px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #4a5568;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+        }
+        .footer {
+            background-color: #e2e8f0;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #718096;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4a5568;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        .credentials {
+            background-color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        h2 {
+            color: #4a5568;
+            margin-top: 25px;
+        }
+        .important {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-wrapper">
+            <div class="header">
+                <h1>Welcome to Church Management System</h1>
+            </div>
+            <div class="content">
+                <p>Dear {{name}},</p>
+                
+                <h2>Your Church Account Has Been Created!</h2>
+                
+                <p>Congratulations! Your church "<strong>{{churchName}}</strong>" has been successfully registered in our Church Management System. Your administrative account has been created with the following credentials:</p>
+                
+                <div class="credentials">
+                    <p><strong>Email/Username:</strong> {{email}}</p>
+                    <p><strong>Password:</strong> {{password}}</p>
+                    <p><strong>Domain:</strong> {{domain}}</p>
+                </div>
+                
+                <p class="important">Please change your password immediately after your first login for security purposes.</p>
+                
+                <p>You can access your church dashboard by clicking the button below:</p>
+                
+                <div style="text-align: center;">
+                    <a href="{{loginLink}}" class="button">Access Dashboard</a>
+                </div>
+                
+                <p>As the administrator, you can:</p>
+                <ul>
+                    <li>Manage church members and their records</li>
+                    <li>Create and manage fellowship groups</li>
+                    <li>Set up volunteer opportunities</li>
+                    <li>Add additional users and assign roles</li>
+                </ul>
+                
+                <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+                
+                <p>Blessings,<br>
+                Church Management System Team</p>
+            </div>
+            <div class="footer">
+                <p>&copy; {{currentYear}} Church Management System. All rights reserved.</p>
+                <p>This email was sent to {{email}}. If you believe this email was sent to you in error, please contact support.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
