@@ -23,6 +23,10 @@ export class Config {
     secure: boolean;
   };
 
+  admin: {
+    jwtSecret: string;
+  };
+
   constructor() {
     this.loadConfig();
   }
@@ -46,6 +50,10 @@ export class Config {
         process.env.EMAIL_FROM || 'noreply@churchmanagementsystem.com',
       ),
       secure: process.env.EMAIL_SECURE === 'true',
+    };
+
+    this.admin = {
+      jwtSecret: String(process.env.ADMIN_JWT_SECRET || 'default-admin-jwt-secret'),
     };
   }
 }

@@ -26,9 +26,10 @@ import { EnvelopeController } from './controllers/envelope.controller';
 import { EmailService } from './services/email.service';
 import { NotificationController } from './controllers/notification.controller';
 import { PasswordResetTokenService } from './services/password.reset.token.service';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [],
+  imports: [AdminModule],
   controllers: [
     AppController,
     UserController,
