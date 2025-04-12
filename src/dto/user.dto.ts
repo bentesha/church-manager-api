@@ -15,3 +15,10 @@ export class UpdateUserDto {
   password?: string;
   sendEmail?: boolean;
 }
+
+export class UpdateProfileDto {
+  name?: string;
+  phoneNumber?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}

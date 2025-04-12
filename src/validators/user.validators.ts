@@ -30,3 +30,20 @@ export class UpdateUserValidator extends ValidatorPipe {
     );
   }
 }
+
+export class UpdateProfileValidator extends ValidatorPipe {
+  constructor() {
+    super(
+      Joi.object({
+        name: Joi.string().optional(),
+        phoneNumber: Joi.string().optional(),
+        currentPassword: Joi.string().when('newPassword', {
+          is: Joi.exist(),
+          then: Joi.string().required(),
+          otherwise: Joi.string().optional(),
+        }),
+        newPassword: Joi.string().optional().min(6),
+      }),
+    );
+  }
+}

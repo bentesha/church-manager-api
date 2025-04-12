@@ -9,20 +9,32 @@ import {
   Post,
   Query,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Check } from 'src/decoractors/check.decorator';
 import { MyChurch } from 'src/decorators/my.church.decorator';
-import { CreateUserDto, UpdateUserDto } from 'src/dto/user.dto';
+import { Me } from 'src/decorators/me.decorator';
+import { MySession } from 'src/decorators/my.session.decorator';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UpdateProfileDto,
+} from 'src/dto/user.dto';
 import { ValidationException } from 'src/exceptions/validation.exception';
 import { CheckGuard } from 'src/guards/check.guard';
 import { PasswordHelper } from 'src/helpers/password.helper';
 import { Church } from 'src/models/church.model';
+import { User } from 'src/models/user.model';
+import { Session } from 'src/models/session.model';
 import {
   CreateUserInfo,
   UpdateUserInfo,
   UserService,
 } from 'src/services/user.service';
-import { CreateUserValidator } from 'src/validators/user.validators';
+import {
+  CreateUserValidator,
+  UpdateProfileValidator,
+} from 'src/validators/user.validators';
 import { EmailService } from 'src/services/email.service';
 import { ChurchService } from 'src/services/church.service';
 
@@ -120,6 +132,46 @@ export class UserController {
     }
 
     return user;
+  }
+
+  @Patch('/me')
+  async updateProfile(
+    @Me() user: User,
+    @Body(UpdateProfileValidator) body: UpdateProfileDto,
+  ) {
+    // If trying to update password, verify the current password first
+    if (body.newPassword) {
+      // Get user credentials to verify password
+      const credentials = await this.userService.findCredentials(user.email);
+
+      // Verify current password
+      const isPasswordValid = this.passwordHelper.verifyPassword(
+        body.currentPassword!,
+        credentials!.passwordSalt!,
+        credentials!.passwordHash,
+      );
+
+      if (!isPasswordValid) {
+        throw new UnauthorizedException();
+      }
+    }
+
+    // Prepare update info
+    const info: UpdateUserInfo = {
+      name: body.name,
+      phoneNumber: body.phoneNumber,
+    };
+
+    // Update password if provided
+    if (body.newPassword) {
+      const { salt, hash } = this.passwordHelper.hashPassword(body.newPassword);
+      info.passwordHash = hash;
+      info.passwordSalt = salt;
+    }
+
+    // Update user profile
+    const updatedUser = await this.userService.update(user.id, info);
+    return updatedUser;
   }
 
   @Patch('/:id')

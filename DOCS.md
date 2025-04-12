@@ -242,6 +242,62 @@ Creates a new user.
 }
 ```
 
+### Update Profile (Current User)
+
+Updates the current user's profile information.
+
+- **URL**: `/user/me`
+- **Method**: `PATCH`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: No special permissions required
+
+#### Request Body
+
+```json
+{
+  "name": "John Smith",
+  "phoneNumber": "255712345678",
+  "currentPassword": "oldpassword",
+  "newPassword": "newpassword"
+}
+```
+
+Note: `currentPassword` is required when changing the password (providing `newPassword`). 
+Both `currentPassword` and `newPassword` are optional if not changing the password.
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "790ed7d77d3940489343a06e719fe7db",
+  "name": "John Smith",
+  "email": "john.smith@mychurch.com",
+  "phoneNumber": "255712345678",
+  "churchId": "ef134982fbc34987b25d6cd8dda2561b",
+  "roleId": "0aab9ef85f46477396a300479a3f06b9",
+  "isActive": 1,
+  "isDeleted": 0,
+  "createdAt": "2025-03-01T14:25:40.000Z",
+  "updatedAt": "2025-03-01T14:39:36.000Z"
+}
+```
+
+#### Error Responses
+
+- **Code**: 401 Unauthorized
+  - This status code indicates that the current password provided is incorrect
+  - **Content**:
+    ```json
+    {
+      "message": "Current password is incorrect",
+      "error": "Unauthorized",
+      "statusCode": 401
+    }
+    ```
+
 ### Update User
 
 Updates an existing user.
