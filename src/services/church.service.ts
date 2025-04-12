@@ -132,4 +132,14 @@ export class ChurchService {
   getLoginLink(church: Church): string {
     return `https://${church.domainName}/login`;
   }
+  
+  /**
+   * Returns the password reset URL for a church
+   * @param church - The church object
+   * @param token - The reset token
+   * @returns The password reset URL for the church
+   */
+  getResetLink(church: Church, token: string): string {
+    return `https://${church.domainName}/reset-password?token=${token}`;
+  }
 }

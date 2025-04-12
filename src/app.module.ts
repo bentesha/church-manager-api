@@ -25,6 +25,7 @@ import { EnvelopeService } from './services/envelope.service';
 import { EnvelopeController } from './controllers/envelope.controller';
 import { EmailService } from './services/email.service';
 import { NotificationController } from './controllers/notification.controller';
+import { PasswordResetTokenService } from './services/password.reset.token.service';
 
 @Module({
   imports: [],
@@ -45,13 +46,19 @@ import { NotificationController } from './controllers/notification.controller';
     OpportunityService,
     EnvelopeService,
     EmailService,
+    PasswordResetTokenService,
   ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude({ path: 'auth/login', method: RequestMethod.POST })
+      .exclude(
+        { path: 'auth/login', method: RequestMethod.POST },
+        { path: 'auth/forgot-password', method: RequestMethod.POST },
+        { path: 'auth/verify-reset-token/:token', method: RequestMethod.GET },
+        { path: 'auth/reset-password', method: RequestMethod.POST }
+      )
       .forRoutes('*');
   }
 }

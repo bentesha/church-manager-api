@@ -17,7 +17,7 @@ This document outlines all available API endpoints, request/response formats, an
 
 Authentication is required for most endpoints. The API uses token-based authentication.
 
-All endpoints (except `/auth/login`) require a Bearer token in the Authorization header:
+All endpoints (except `/auth/login`, `/auth/forgot-password`, `/auth/verify-reset-token/:token`, and `/auth/reset-password`) require a Bearer token in the Authorization header:
 
 ```
 Authorization: Bearer 5f37cf57978edcaa7102bd970864a502fb65c5dd1b00abd849f1de09721a1672
@@ -120,6 +120,116 @@ Retrieves the currently authenticated user's information.
 - **Code**: 401 Unauthorized
   - This status code indicates that the provided token is invalid or expired
 - **Content**: No content returned
+
+### Forgot Password
+
+Initiates the password reset process by sending a reset link to the user's email.
+
+- **URL**: `/auth/forgot-password`
+- **Method**: `POST`
+- **Auth Required**: No
+
+#### Request Body
+
+```json
+{
+  "email": "user@mychurch.com"
+}
+```
+
+#### Success Response
+
+- **Code**: 201 Created
+- **Content**: No content
+
+#### Error Response
+
+- **Code**: 404 Not Found
+  - This status code indicates that no user with the provided email was found
+  - **Content**:
+    ```json
+    {
+      "statusCode": 404,
+      "message": "User not found",
+      "error": "Not Found"
+    }
+    ```
+
+### Verify Reset Token
+
+Verifies if a password reset token is valid and not expired.
+
+- **URL**: `/auth/verify-reset-token/:token`
+- **Method**: `GET`
+- **Auth Required**: No
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "valid": true
+}
+```
+
+#### Error Response
+
+- **Code**: 200 OK
+  - This status code is returned even when the token is invalid, but with a response indicating it's not valid
+  - **Content**:
+    ```json
+    {
+      "valid": false
+    }
+    ```
+
+### Reset Password
+
+Resets a user's password using a valid reset token.
+
+- **URL**: `/auth/reset-password`
+- **Method**: `POST`
+- **Auth Required**: No
+
+#### Request Body
+
+```json
+{
+  "token": "5f37cf57978edcaa7102bd970864a502fb65c5dd1b00abd849f1de09721a1672",
+  "password": "newSecurePassword"
+}
+```
+
+#### Success Response
+
+- **Code**: 201 Created
+- **Content**: No content
+
+#### Error Responses
+
+- **Code**: 401 Unauthorized
+  - This status code indicates that the token is invalid or expired
+  - **Content**:
+    ```json
+    {
+      "statusCode": 401,
+      "message": "Invalid or expired token",
+      "error": "Unauthorized"
+    }
+    ```
+
+- **Code**: 404 Not Found
+  - This status code indicates that the user associated with the token was not found
+  - **Content**:
+    ```json
+    {
+      "statusCode": 404,
+      "message": "User not found",
+      "error": "Not Found"
+    }
+    ```
 
 ### Logout
 
