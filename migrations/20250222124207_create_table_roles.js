@@ -5,7 +5,7 @@
 exports.up = async function (knex) {
   await knex.schema.createTable('user_roles', function (table) {
     table.string('id').primary(); // Unique identifier for the role
-    table.string('name').notNullable().unique(); // Role name (Admin, Moderator, etc.)
+    table.string('name').notNullable() // Role name (Admin, Moderator, etc.)
     table
       .string('churchId')
       .notNullable()
@@ -14,6 +14,7 @@ exports.up = async function (knex) {
     table.text('description').nullable(); // Optional description of the role
     table.timestamp('createdAt').defaultTo(knex.fn.now()); // Timestamp for record creation
     table.timestamp('updatedAt').defaultTo(knex.fn.now()); // Timestamp for last update
+    table.unique(['name', 'churchId']);
   });
 };
 

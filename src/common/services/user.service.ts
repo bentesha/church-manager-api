@@ -70,7 +70,7 @@ export class UserService {
    * @note This should be executed inside a transaction to ensure consistency.
    */
   async create(info: CreateUserInfo): Promise<User> {
-    return User.transaction(async (trx) => {
+    const user = await User.transaction(async (trx) => {
       const userId = this.idHelper.generate();
       const timestamp = this.dateHelper.formatDateTime();
 
@@ -87,8 +87,7 @@ export class UserService {
         createdAt: timestamp,
         updatedAt: timestamp,
       };
-      await User.query(trx).insert(userRow);
-
+      const user = await User.query(trx).insert(userRow);
       // Create user credentials record
       const credentialRow: UserCredentialRow = {
         userId,
@@ -100,10 +99,11 @@ export class UserService {
         updatedAt: timestamp,
       };
       await UserCredential.query(trx).insert(credentialRow);
-
-      const user = await this.findById(userId);
-      return user!;
+      return user;
     });
+
+    // Return the updated user
+    return (await this.findById(user.id))!;
   }
 
   /**

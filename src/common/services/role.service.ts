@@ -9,6 +9,7 @@ export interface CreateRoleInfo {
   name: string;
   churchId: string;
   description?: string;
+  actions?: string[];
 }
 
 export interface UpdateRoleInfo {
@@ -56,16 +57,31 @@ export class RoleService {
    * @returns The created role record.
    */
   async create(info: CreateRoleInfo): Promise<UserRole> {
-    const role = {
-      id: this.idHelper.generate(),
-      name: info.name,
-      churchId: info.churchId,
-      description: info.description || null,
-      createdAt: this.dateHelper.formatDateTime(),
-      updatedAt: this.dateHelper.formatDateTime(),
-    };
-    await UserRole.query().insert(role);
-    return (await this.findById(role.id))!;
+    return UserRole.transaction(async (trx) => {
+      // Create the role
+      const role = {
+        id: this.idHelper.generate(),
+        name: info.name,
+        churchId: info.churchId,
+        description: info.description || null,
+        createdAt: this.dateHelper.formatDateTime(),
+        updatedAt: this.dateHelper.formatDateTime(),
+      };
+      await UserRole.query(trx).insert(role);
+      
+      // If actions are provided, create the role actions one by one
+      if (info.actions && info.actions.length > 0) {
+        for (const action of info.actions) {
+          await RoleAction.query(trx).insert({
+            id: this.idHelper.generate(),
+            roleId: role.id,
+            action,
+          });
+        }
+      }
+      
+      return (await this.findById(role.id))!;
+    });
   }
 
   /**
