@@ -1,4 +1,4 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import findQuery from 'objection-find';
 import { MemberRow } from 'src/data/member.row';
 import { DateHelper } from 'src/helpers/date.helper';

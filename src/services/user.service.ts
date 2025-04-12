@@ -69,7 +69,7 @@ export class UserService {
    *
    * @note This should be executed inside a transaction to ensure consistency.
    */
-  async create(info: CreateUserInfo): Promise<User | undefined> {
+  async create(info: CreateUserInfo): Promise<User> {
     return User.transaction(async (trx) => {
       const userId = this.idHelper.generate();
       const timestamp = this.dateHelper.formatDateTime();
@@ -101,7 +101,8 @@ export class UserService {
       };
       await UserCredential.query(trx).insert(credentialRow);
 
-      return this.findById(userId);
+      const user = await this.findById(userId);
+      return user!
     });
   }
 

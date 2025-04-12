@@ -10,6 +10,7 @@ export class CreateUserValidator extends ValidatorPipe {
         phoneNumber: Joi.string().required(),
         roleId: Joi.string().required(),
         password: Joi.string().required(),
+        sendEmail: Joi.boolean().optional(),
       }),
     );
   }

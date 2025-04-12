@@ -23,6 +23,7 @@ import {
   UserService,
 } from 'src/services/user.service';
 import { CreateUserValidator } from 'src/validators/user.validators';
+import { EmailService } from 'src/services/email.service';
 
 @Controller('user')
 @UseGuards(CheckGuard)
@@ -30,6 +31,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly passwordHelper: PasswordHelper,
+    private readonly emailService: EmailService,
   ) {}
 
   @Get()
@@ -101,7 +103,21 @@ export class UserController {
       passwordSalt: salt,
     };
 
-    return this.userService.create(info);
+    const user = await this.userService.create(info);
+    
+    // Send email notification if requested
+    if (body.sendEmail === true) {
+      await this.emailService.sendNewUserEmail({
+        to: user.email,
+        name: user.name,
+        churchName: church.name,
+        email: user.email,
+        password: body.password,
+        loginLink: `${church.domainName}/login`,
+      });
+    }
+
+    return user;
   }
 
   @Patch('/:id')

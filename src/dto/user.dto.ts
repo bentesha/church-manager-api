@@ -4,6 +4,7 @@ export class CreateUserDto {
   phoneNumber: string | null;
   roleId: string;
   password: string;
+  sendEmail?: boolean;
 }
 
 export class UpdateUserDto {
