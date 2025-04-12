@@ -218,9 +218,12 @@ Creates a new user.
   "email": "john.solomn@mychurch.com",
   "password": "securepassword",
   "phoneNumber": "+255786908766",
-  "roleId": "5998e820e6234cd18a4f8e1c1ee1734f"
+  "roleId": "5998e820e6234cd18a4f8e1c1ee1734f",
+  "sendEmail": true
 }
 ```
+
+Note: The optional `sendEmail` parameter, when set to `true`, will trigger an email notification to the user with their login credentials.
 
 #### Success Response
 
@@ -312,9 +315,13 @@ Updates an existing user.
 ```json
 {
   "name": "James Kisamo",
-  "phoneNumber": "255786908766"
+  "phoneNumber": "255786908766",
+  "password": "newpassword",
+  "sendEmail": true
 }
 ```
+
+Note: The optional `sendEmail` parameter, when set to `true` and a new password is provided, will trigger an email notification to the user with their updated credentials.
 
 #### Success Response
 
