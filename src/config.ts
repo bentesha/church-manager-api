@@ -42,7 +42,9 @@ export class Config {
       port: Number(process.env.EMAIL_PORT) || 587,
       user: String(process.env.EMAIL_USER || ''),
       password: String(process.env.EMAIL_PASSWORD || ''),
-      from: String(process.env.EMAIL_FROM || 'noreply@churchmanagementsystem.com'),
+      from: String(
+        process.env.EMAIL_FROM || 'noreply@churchmanagementsystem.com',
+      ),
       secure: process.env.EMAIL_SECURE === 'true',
     };
   }

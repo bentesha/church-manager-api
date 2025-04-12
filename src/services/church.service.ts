@@ -88,7 +88,10 @@ export class ChurchService {
    *
    * @note Logging should be added to track updates for auditing purposes.
    */
-  async update(id: string, info: UpdateChurchInfo): Promise<Church | undefined> {
+  async update(
+    id: string,
+    info: UpdateChurchInfo,
+  ): Promise<Church | undefined> {
     const updates: Partial<ChurchRow> = {
       name: info.name,
       domainName: info.domainName,
@@ -132,7 +135,7 @@ export class ChurchService {
   getLoginLink(church: Church): string {
     return `https://${church.domainName}/login`;
   }
-  
+
   /**
    * Returns the password reset URL for a church
    * @param church - The church object

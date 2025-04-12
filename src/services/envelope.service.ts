@@ -245,7 +245,7 @@ export class EnvelopeService {
       });
 
       Member.query(trx).where({ id: memberId }).update({
-        envelopeNumber: envelope!.envelopeNumber,
+        envelopeNumber: envelope.envelopeNumber,
       });
 
       return (await Envelope.query(trx).findById(envelopeId))!;

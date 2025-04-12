@@ -29,7 +29,7 @@ export class AuthMiddleware implements NestMiddleware {
       throw new ForbiddenException();
     }
 
-    const user = await this.userService.findById(session!.userId);
+    const user = await this.userService.findById(session.userId);
     const church = await this.churchService.findById(user!.churchId);
 
     // Attach session, user and church to the request object

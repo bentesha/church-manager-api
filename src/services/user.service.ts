@@ -102,7 +102,7 @@ export class UserService {
       await UserCredential.query(trx).insert(credentialRow);
 
       const user = await this.findById(userId);
-      return user!
+      return user!;
     });
   }
 

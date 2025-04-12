@@ -29,7 +29,18 @@ import { PasswordResetTokenService } from './services/password.reset.token.servi
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController, AuthController, RoleController, ChurchController, FellowshipController, MemberController, OpportunityController, EnvelopeController, NotificationController],
+  controllers: [
+    AppController,
+    UserController,
+    AuthController,
+    RoleController,
+    ChurchController,
+    FellowshipController,
+    MemberController,
+    OpportunityController,
+    EnvelopeController,
+    NotificationController,
+  ],
   providers: [
     AppService,
     ChurchService,
@@ -57,7 +68,7 @@ export class AppModule {
         { path: 'auth/login', method: RequestMethod.POST },
         { path: 'auth/forgot-password', method: RequestMethod.POST },
         { path: 'auth/verify-reset-token/:token', method: RequestMethod.GET },
-        { path: 'auth/reset-password', method: RequestMethod.POST }
+        { path: 'auth/reset-password', method: RequestMethod.POST },
       )
       .forRoutes('*');
   }

@@ -26,17 +26,17 @@ export class VolunteerInterest extends Model {
         modelClass: Member,
         join: {
           from: 'member_volunteer_interests.memberId',
-          to: 'members.id'
-        }
+          to: 'members.id',
+        },
       },
       opportunity: {
         relation: Model.BelongsToOneRelation,
         modelClass: Opportunity,
         join: {
           from: 'member_volunteer_interests.opportunityId',
-          to: 'volunteer_opportunities.id'
-        }
-      }
+          to: 'volunteer_opportunities.id',
+        },
+      },
     };
   }
 }

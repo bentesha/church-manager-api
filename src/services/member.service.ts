@@ -225,8 +225,8 @@ export class MemberService {
         }
       }
 
-      return createdMember!;
-    })!;
+      return createdMember;
+    });
 
     // Return member with related records loaded
     return (await this.findById(member.id))!;

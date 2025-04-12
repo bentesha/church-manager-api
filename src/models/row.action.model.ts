@@ -1,5 +1,5 @@
 import { Model } from 'objection';
-import { RoleActionRow } from 'src/data/role.action.row'
+import { RoleActionRow } from 'src/data/role.action.row';
 
 export class RoleAction extends Model implements RoleActionRow {
   id: string;
