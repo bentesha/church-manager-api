@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware, ForbiddenException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { SessionService } from 'src/services/session.service';
-import { UserService } from 'src/services/user.service';
-import { ChurchService } from 'src/services/church.service';
+import { SessionService } from 'src/common/services/session.service';
+import { UserService } from 'src/common/services/user.service';
+import { ChurchService } from 'src/common/services/church.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

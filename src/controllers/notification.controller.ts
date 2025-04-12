@@ -9,9 +9,9 @@ import {
 import { Check } from 'src/decoractors/check.decorator';
 import { CheckGuard } from 'src/guards/check.guard';
 import { MyChurch } from 'src/decorators/my.church.decorator';
-import { EmailService } from 'src/services/email.service';
-import { UserService } from 'src/services/user.service';
-import { ChurchService } from 'src/services/church.service';
+import { EmailService } from 'src/common/services/email.service';
+import { UserService } from 'src/common/services/user.service';
+import { ChurchService } from 'src/common/services/church.service';
 import { Church } from 'src/models/church.model';
 import {
   NewUserNotificationValidator,

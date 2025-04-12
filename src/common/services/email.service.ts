@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as handlebars from 'handlebars';
 import { promisify } from 'util';
-import { Config } from '../config';
+import { Config } from 'src/config';
 
 const readFile = promisify(fs.readFile);
 

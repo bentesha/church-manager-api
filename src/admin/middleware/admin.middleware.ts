@@ -9,7 +9,7 @@ import { Config } from '../../config';
 import { AdminInfo } from '../types/admin.info';
 
 @Injectable()
-export class AdminJwtMiddleware implements NestMiddleware {
+export class AdminMiddleware implements NestMiddleware {
   constructor(
     private readonly jwtService: JwtService,
     private readonly config: Config,
@@ -19,12 +19,12 @@ export class AdminJwtMiddleware implements NestMiddleware {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new UnauthorizedException('Admin JWT token required');
+        throw new UnauthorizedException();
       }
 
       const token = authHeader.substring(7); // Remove 'Bearer ' prefix
       const payload = this.jwtService.verify<AdminInfo>(token, {
-        secret: this.config.admin?.jwtSecret || 'default-admin-secret', // Use default for testing if not configured
+        secret: this.config.admin?.jwtSecret, // Use default for testing if not configured
       });
 
       // Attach admin info to request for controllers to use

@@ -10,18 +10,18 @@ import {
   Param,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UserService } from 'src/services/user.service';
-import { AuthService, LoginInfo } from 'src/services/auth.service';
-import { SessionService } from 'src/services/session.service';
+import { UserService } from 'src/common/services/user.service';
+import { AuthService, LoginInfo } from 'src/common/services/auth.service';
+import { SessionService } from 'src/common/services/session.service';
 import { Session } from 'src/models/session.model';
 import { MySession } from 'src/decorators/my.session.decorator';
 import { User } from 'src/models/user.model';
 import { Me } from 'src/decorators/me.decorator';
-import { RoleService } from 'src/services/role.service';
-import { PasswordResetTokenService } from 'src/services/password.reset.token.service';
+import { RoleService } from 'src/common/services/role.service';
+import { PasswordResetTokenService } from 'src/common/services/password.reset.token.service';
 import { PasswordHelper } from 'src/helpers/password.helper';
-import { EmailService } from 'src/services/email.service';
-import { ChurchService } from 'src/services/church.service';
+import { EmailService } from 'src/common/services/email.service';
+import { ChurchService } from 'src/common/services/church.service';
 import { ForgotPasswordDto, ResetPasswordDto } from 'src/dto/auth.dto';
 import {
   ForgotPasswordValidator,

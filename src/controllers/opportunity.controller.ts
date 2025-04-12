@@ -23,7 +23,7 @@ import {
   CreateOpportunityInfo,
   OpportunityService,
   UpdateOpportunityInfo,
-} from 'src/services/opportunity.service';
+} from 'src/common/services/opportunity.service';
 import { CreateOpportunityValidator } from 'src/validators/opportunity.validators';
 
 @Controller('opportunity')

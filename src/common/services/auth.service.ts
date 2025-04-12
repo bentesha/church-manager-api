@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserCredential } from 'src/models/user.credential.model';
-import { SessionService } from 'src/services/session.service';
+import { SessionService } from 'src/common/services/session.service';
 import { PasswordHelper } from 'src/helpers/password.helper';
 import { Session } from 'src/models/session.model';
 

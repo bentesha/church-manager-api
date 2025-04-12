@@ -8,7 +8,7 @@ import {
 import { Check } from 'src/decoractors/check.decorator';
 import { MyChurch } from 'src/decorators/my.church.decorator';
 import { Church } from 'src/models/church.model';
-import { RoleService } from 'src/services/role.service';
+import { RoleService } from 'src/common/services/role.service';
 
 @Controller('role')
 export class RoleController {

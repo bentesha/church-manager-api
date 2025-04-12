@@ -22,8 +22,8 @@ import {
 import { ValidationException } from 'src/exceptions/validation.exception';
 import { CheckGuard } from 'src/guards/check.guard';
 import { Church } from 'src/models/church.model';
-import { EnvelopeService } from 'src/services/envelope.service';
-import { MemberService } from 'src/services/member.service';
+import { EnvelopeService } from 'src/common/services/envelope.service';
+import { MemberService } from 'src/common/services/member.service';
 import {
   AssignEnvelopeValidator,
   CreateEnvelopeValidator,

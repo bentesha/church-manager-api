@@ -19,13 +19,13 @@ import {
 import { ValidationException } from 'src/exceptions/validation.exception';
 import { CheckGuard } from 'src/guards/check.guard';
 import { Church } from 'src/models/church.model';
-import { FellowshipService } from 'src/services/fellowship.service';
-import { OpportunityService } from 'src/services/opportunity.service';
+import { FellowshipService } from 'src/common/services/fellowship.service';
+import { OpportunityService } from 'src/common/services/opportunity.service';
 import {
   CreateMemberInfo,
   MemberService,
   UpdateMemberInfo,
-} from 'src/services/member.service';
+} from 'src/common/services/member.service';
 import {
   CreateMemberValidator,
   UpdateMemberValidator,

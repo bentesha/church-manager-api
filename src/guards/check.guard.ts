@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Check } from 'src/decoractors/check.decorator';
 import { User } from 'src/models/user.model';
-import { RoleService } from 'src/services/role.service';
+import { RoleService } from 'src/common/services/role.service';
 
 @Injectable()
 export class CheckGuard implements CanActivate {

@@ -30,13 +30,13 @@ import {
   CreateUserInfo,
   UpdateUserInfo,
   UserService,
-} from 'src/services/user.service';
+} from 'src/common/services/user.service';
 import {
   CreateUserValidator,
   UpdateProfileValidator,
 } from 'src/validators/user.validators';
-import { EmailService } from 'src/services/email.service';
-import { ChurchService } from 'src/services/church.service';
+import { EmailService } from 'src/common/services/email.service';
+import { ChurchService } from 'src/common/services/church.service';
 
 @Controller('user')
 @UseGuards(CheckGuard)

@@ -23,12 +23,12 @@ import {
   CreateFellowshipInfo,
   FellowshipService,
   UpdateFellowshipInfo,
-} from 'src/services/fellowship.service';
+} from 'src/common/services/fellowship.service';
 import {
   CreateFellowshipValidator,
   UpdateFellowshipValidator,
 } from 'src/validators/fellowship.validators';
-import { MemberService } from 'src/services/member.service';
+import { MemberService } from 'src/common/services/member.service';
 
 @Controller('fellowship')
 @UseGuards(CheckGuard)

@@ -14,7 +14,7 @@ import {
   UserService, 
   CreateUserInfo, 
   UpdateUserInfo 
-} from '../../services/user.service';
+} from '../../common/services/user.service';
 import { PasswordHelper } from '../../helpers/password.helper';
 import { AdminInfo } from '../types/admin.info';
 import { MyAdmin } from '../decorators/my.admin.decorator';
