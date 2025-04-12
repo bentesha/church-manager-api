@@ -13,4 +13,5 @@ export class UpdateUserDto {
   isActive?: boolean;
   roleId?: string;
   password?: string;
+  sendEmail?: boolean;
 }

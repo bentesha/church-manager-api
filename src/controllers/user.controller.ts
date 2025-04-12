@@ -104,7 +104,7 @@ export class UserController {
     };
 
     const user = await this.userService.create(info);
-    
+
     // Send email notification if requested
     if (body.sendEmail === true) {
       await this.emailService.sendNewUserEmail({
@@ -122,7 +122,11 @@ export class UserController {
 
   @Patch('/:id')
   @Check('user.update')
-  async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
+  async update(
+    @MyChurch() church: Church,
+    @Param('id') id: string,
+    @Body() body: UpdateUserDto,
+  ) {
     // Todo: Check if phoneNumber does not exist
 
     const info: UpdateUserInfo = {
@@ -132,8 +136,9 @@ export class UserController {
       roleId: body.roleId,
     };
 
-    if (body.password) {
-      const { salt, hash } = this.passwordHelper.hashPassword(body.password);
+    const passwordChanged = !!body.password;
+    if (passwordChanged) {
+      const { salt, hash } = this.passwordHelper.hashPassword(body.password!);
       info.passwordHash = hash;
       info.passwordSalt = salt;
     }
@@ -142,6 +147,19 @@ export class UserController {
     if (!user) {
       throw new NotFoundException();
     }
+
+    // Send email notification if requested and password was changed
+    if (passwordChanged && body.sendEmail) {
+      await this.emailService.sendPasswordUpdatedEmail({
+        to: user.email,
+        name: user.name,
+        churchName: church.name,
+        email: user.email,
+        password: body.password!,
+        loginLink: `${church.domainName}/login`,
+      });
+    }
+
     return user;
   }
 

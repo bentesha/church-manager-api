@@ -25,6 +25,7 @@ export class UpdateUserValidator extends ValidatorPipe {
         roleId: Joi.string().optional(),
         username: Joi.string().optional(),
         password: Joi.string().optional(),
+        sendEmail: Joi.boolean().optional(),
       }),
     );
   }
