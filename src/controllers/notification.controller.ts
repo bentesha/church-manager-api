@@ -11,6 +11,7 @@ import { CheckGuard } from 'src/guards/check.guard';
 import { MyChurch } from 'src/decorators/my.church.decorator';
 import { EmailService } from 'src/services/email.service';
 import { UserService } from 'src/services/user.service';
+import { ChurchService } from 'src/services/church.service';
 import { Church } from 'src/models/church.model';
 import {
   NewUserNotificationValidator,
@@ -33,6 +34,7 @@ export class NotificationController {
   constructor(
     private readonly emailService: EmailService,
     private readonly userService: UserService,
+    private readonly churchService: ChurchService,
   ) {}
 
   @Post('onboard')
@@ -48,7 +50,7 @@ export class NotificationController {
     }
 
     // Generate login link
-    const loginLink = `https://${church.domainName}/login`;
+    const loginLink = this.churchService.getLoginLink(church);
 
     // Send email notification
     const result = await this.emailService.sendOnboardEmail({
@@ -79,7 +81,7 @@ export class NotificationController {
     }
 
     // Generate login link
-    const loginLink = `https://${church.domainName}/login`;
+    const loginLink = this.churchService.getLoginLink(church);
 
     // Send email notification
     const result = await this.emailService.sendNewUserEmail({
@@ -164,7 +166,7 @@ export class NotificationController {
     }
 
     // Generate login link
-    const loginLink = `https://${church.domainName}/login`;
+    const loginLink = this.churchService.getLoginLink(church);
 
     // Send email notification
     const result = await this.emailService.sendPasswordUpdatedEmail({

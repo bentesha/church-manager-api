@@ -123,4 +123,13 @@ export class ChurchService {
     await Church.query().deleteById(id);
     return church;
   }
+
+  /**
+   * Returns the login URL for a church
+   * @param church - The church object
+   * @returns The login URL for the church
+   */
+  getLoginLink(church: Church): string {
+    return `https://${church.domainName}/login`;
+  }
 }

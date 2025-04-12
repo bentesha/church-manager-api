@@ -24,6 +24,7 @@ import {
 } from 'src/services/user.service';
 import { CreateUserValidator } from 'src/validators/user.validators';
 import { EmailService } from 'src/services/email.service';
+import { ChurchService } from 'src/services/church.service';
 
 @Controller('user')
 @UseGuards(CheckGuard)
@@ -32,6 +33,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly passwordHelper: PasswordHelper,
     private readonly emailService: EmailService,
+    private readonly churchService: ChurchService,
   ) {}
 
   @Get()
@@ -113,7 +115,7 @@ export class UserController {
         churchName: church.name,
         email: user.email,
         password: body.password,
-        loginLink: `${church.domainName}/login`,
+        loginLink: this.churchService.getLoginLink(church),
       });
     }
 
@@ -156,7 +158,7 @@ export class UserController {
         churchName: church.name,
         email: user.email,
         password: body.password!,
-        loginLink: `${church.domainName}/login`,
+        loginLink: this.churchService.getLoginLink(church),
       });
     }
 
