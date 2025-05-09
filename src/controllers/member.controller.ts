@@ -67,19 +67,6 @@ export class MemberController {
     @MyChurch() church: Church,
     @Body(CreateMemberValidator) body: CreateMemberDto,
   ) {
-    // Check if envelope number is unique if provided
-    if (body.envelopeNumber) {
-      const existingMember = await this.memberService.findOne({
-        envelopeNumber: body.envelopeNumber,
-        churchId: church.id,
-      });
-
-      if (existingMember) {
-        throw new ValidationException({
-          envelopeNumber: 'Envelope number must be unique within this church',
-        });
-      }
-    }
 
     // Check if phone number is unique within this church
     const memberWithSamePhone = await this.memberService.findOne({
@@ -124,7 +111,7 @@ export class MemberController {
 
     const info: CreateMemberInfo = {
       churchId: church.id,
-      envelopeNumber: body.envelopeNumber,
+      envelopeNumber: null,
       firstName: body.firstName,
       middleName: body.middleName,
       lastName: body.lastName,

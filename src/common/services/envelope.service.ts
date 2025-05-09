@@ -43,6 +43,19 @@ export class EnvelopeService {
   }
 
   /**
+   * Finds the first envelope that matches the given query.
+   * @param query - Partial properties to filter results.
+   * @returns An envelope that matches the query.
+   */
+  async findOne(query: Partial<EnvelopeRow>): Promise<Envelope | undefined> {
+    return findQuery(Envelope)
+      .allowAll(true)
+      .allowEager('[member, history]')!
+      .build(query)
+      .first();
+  }
+
+  /**
    * Finds a single envelope by its number.
    * @param envelopeNumber - The envelope number.
    * @param churchId - The church ID.
@@ -244,11 +257,12 @@ export class EnvelopeService {
         updatedAt: now,
       });
 
-      Member.query(trx).where({ id: memberId }).update({
+      await Member.query(trx).where({ id: memberId }).update({
         envelopeNumber: envelope.envelopeNumber,
       });
 
-      return (await Envelope.query(trx).findById(envelopeId))!;
+      const updatedEnvelop = await Envelope.query(trx).findById(envelopeId);
+      return updatedEnvelop!;
     });
   }
 
@@ -297,7 +311,7 @@ export class EnvelopeService {
         updatedAt: now,
       });
 
-      Member.query(trx)
+      await Member.query(trx)
         .where({ id: formerMemberId })
         .update({ envelopeNumber: null });
 

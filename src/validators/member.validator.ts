@@ -11,7 +11,6 @@ export class CreateMemberValidator extends ValidatorPipe {
   constructor() {
     super(
       Joi.object({
-        envelopeNumber: Joi.string().allow(null),
         firstName: Joi.string().required(),
         middleName: Joi.string().allow(null),
         lastName: Joi.string().required(),
@@ -81,7 +80,6 @@ export class UpdateMemberValidator extends ValidatorPipe {
   constructor() {
     super(
       Joi.object({
-        envelopeNumber: Joi.string().allow(null).optional(),
         firstName: Joi.string().optional(),
         middleName: Joi.string().allow(null).optional(),
         lastName: Joi.string().optional(),

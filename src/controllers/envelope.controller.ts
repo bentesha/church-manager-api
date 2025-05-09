@@ -194,11 +194,11 @@ export class EnvelopeController {
     }
 
     // Check if member already has an envelope
-    const memberEnvelopes = await this.envelopeService.findAll({
+    const existingEnvelope = await this.envelopeService.findOne({
       memberId: body.memberId,
     });
 
-    if (memberEnvelopes.length > 0) {
+    if (existingEnvelope) {
       throw new ValidationException({
         memberId: 'Member already has an envelope assigned',
       });

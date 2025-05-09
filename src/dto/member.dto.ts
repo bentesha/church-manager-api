@@ -23,7 +23,6 @@ export interface UpdateDependantDto {
 }
 
 export interface CreateMemberDto {
-  envelopeNumber: string | null;
   firstName: string;
   middleName: string | null;
   lastName: string;
