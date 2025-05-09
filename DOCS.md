@@ -1074,6 +1074,211 @@ Deletes a member.
 - **Code**: 200 OK
 - **Content**: Deleted member object
 
+## Volunteer Opportunities
+
+Endpoints for managing volunteer opportunities within the church.
+
+### Get All Opportunities
+
+Retrieves a list of all volunteer opportunities belonging to the current church.
+
+- **URL**: `/opportunity`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.findAll`
+- **Query Parameters**:
+  - Supports objection-find library query parameters for filtering
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+[
+  {
+    "id": "cdd519e8cec247aca455ec05faccfad2",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "name": "Main Choir",
+    "description": "Sing in the church's main choir during Sunday services",
+    "createdAt": "2025-03-07T04:41:29.000Z",
+    "updatedAt": "2025-03-07T04:41:29.000Z"
+  },
+  {
+    "id": "e5f6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "name": "Sunday School Teacher",
+    "description": "Teach children during Sunday School sessions",
+    "createdAt": "2025-03-07T04:41:29.000Z",
+    "updatedAt": "2025-03-07T04:41:29.000Z"
+  }
+  // More opportunities...
+]
+```
+
+### Get Opportunity by ID
+
+Retrieves a specific volunteer opportunity by ID.
+
+- **URL**: `/opportunity/:id`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.findById`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "cdd519e8cec247aca455ec05faccfad2",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "Main Choir",
+  "description": "Sing in the church's main choir during Sunday services",
+  "createdAt": "2025-03-07T04:41:29.000Z",
+  "updatedAt": "2025-03-07T04:41:29.000Z"
+}
+```
+
+#### Error Response
+
+- **Code**: 404 Not Found
+  - This status code indicates that the opportunity does not exist or does not belong to the current church
+
+### Create Opportunity
+
+Creates a new volunteer opportunity.
+
+- **URL**: `/opportunity`
+- **Method**: `POST`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.create`
+
+#### Request Body
+
+```json
+{
+  "name": "Youth Ministry Helper",
+  "description": "Assist the youth pastor with weekly youth group activities and mentoring"
+}
+```
+
+#### Success Response
+
+- **Code**: 201 Created
+- **Content**:
+
+```json
+{
+  "id": "f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "Youth Ministry Helper",
+  "description": "Assist the youth pastor with weekly youth group activities and mentoring",
+  "createdAt": "2025-03-20T15:42:30.000Z",
+  "updatedAt": "2025-03-20T15:42:30.000Z"
+}
+```
+
+#### Error Response
+
+- **Code**: 400 Bad Request
+  - This status code indicates validation errors, such as a duplicate opportunity name
+  - **Content**:
+    ```json
+    {
+      "statusCode": 400,
+      "message": "Validation failed",
+      "error": "Validation Error",
+      "details": {
+        "name": "Opportunity name must be unique within this church"
+      }
+    }
+    ```
+
+### Update Opportunity
+
+Updates an existing volunteer opportunity.
+
+- **URL**: `/opportunity/:id`
+- **Method**: `PATCH`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.update`
+
+#### Request Body
+
+```json
+{
+  "name": "Youth Ministry Assistant",
+  "description": "Assist the youth pastor with weekly youth group activities, mentoring, and event planning"
+}
+```
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "Youth Ministry Assistant",
+  "description": "Assist the youth pastor with weekly youth group activities, mentoring, and event planning",
+  "createdAt": "2025-03-20T15:42:30.000Z",
+  "updatedAt": "2025-03-20T15:45:12.000Z"
+}
+```
+
+#### Error Responses
+
+- **Code**: 400 Bad Request
+  - This status code indicates validation errors, such as a duplicate opportunity name
+  - **Content**:
+    ```json
+    {
+      "statusCode": 400,
+      "message": "Validation failed",
+      "error": "Validation Error",
+      "details": {
+        "name": "Opportunity name must be unique within this church"
+      }
+    }
+    ```
+
+- **Code**: 404 Not Found
+  - This status code indicates that the opportunity does not exist or does not belong to the current church
+
+### Delete Opportunity
+
+Deletes a volunteer opportunity.
+
+- **URL**: `/opportunity/:id`
+- **Method**: `DELETE`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `opportunity.deleteById`
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "id": "f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u",
+  "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+  "name": "Youth Ministry Assistant",
+  "description": "Assist the youth pastor with weekly youth group activities, mentoring, and event planning",
+  "createdAt": "2025-03-20T15:42:30.000Z",
+  "updatedAt": "2025-03-20T15:45:12.000Z"
+}
+```
+
+#### Error Response
+
+- **Code**: 404 Not Found
+  - This status code indicates that the opportunity does not exist or does not belong to the current church
+
 ## Envelopes
 
 Endpoints for managing church membership envelopes.
