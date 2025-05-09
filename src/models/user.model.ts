@@ -1,5 +1,6 @@
 import { Model } from 'objection';
 import { UserRow } from 'src/data/user.row';
+import { UserRole } from './user.role.model';
 
 export class User extends Model implements UserRow {
   id: string;
@@ -14,6 +15,19 @@ export class User extends Model implements UserRow {
   updatedAt: string | Date;
 
   public static tableName = 'users';
+
+  static get relationMappings() {
+    return {
+      role: {
+        modelClass: UserRole,
+        relation: Model.BelongsToOneRelation,
+        join: {
+          from: 'users.roleId',
+          to: 'user_roles.id',
+        },
+      },
+    };
+  }
 
   /**
    * Exclude soft-deleted users by default.
