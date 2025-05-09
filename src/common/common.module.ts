@@ -14,6 +14,7 @@ import { EnvelopeService } from './services/envelope.service';
 import { EmailService } from './services/email.service';
 import { PasswordResetTokenService } from './services/password.reset.token.service';
 import { AuthService } from './services/auth.service';
+import { InterestService } from './services/interest.service';
 
 /**
  * Common module that provides shared services across the application
@@ -42,6 +43,7 @@ import { AuthService } from './services/auth.service';
     AuthService,
     RoleService,
     PasswordResetTokenService,
+    InterestService,
   ],
   exports: [
     // Export all providers so they're available to importing modules
@@ -60,6 +62,7 @@ import { AuthService } from './services/auth.service';
     EmailService,
     PasswordResetTokenService,
     AuthService,
+    InterestService,
   ],
 })
 export class CommonModule {}

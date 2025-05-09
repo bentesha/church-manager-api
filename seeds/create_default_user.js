@@ -113,6 +113,7 @@ exports.seed = async function (knex) {
     'envelope.assign',
     'envelope.release',
     'envelope.getHistory',
+    'interest.findAll',
   ];
 
   // Recreate user roles

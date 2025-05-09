@@ -10,8 +10,9 @@ This document outlines all available API endpoints, request/response formats, an
 4. [Fellowships](#fellowships)
 5. [Members](#members)
 6. [Volunteer Opportunities](#volunteer-opportunities)
-7. [Roles](#roles)
-8. [Envelopes](#envelopes)
+7. [Volunteer Interests](#volunteer-interests)
+8. [Roles](#roles)
+9. [Envelopes](#envelopes)
 
 ## Authentication
 
@@ -1278,6 +1279,99 @@ Deletes a volunteer opportunity.
 
 - **Code**: 404 Not Found
   - This status code indicates that the opportunity does not exist or does not belong to the current church
+
+## Volunteer Interests
+
+Endpoints for managing volunteer interest relationships between members and opportunities.
+
+### Get All Member Volunteer Interests
+
+Retrieves a list of all volunteer interest records, showing the relationship between members and opportunities.
+
+- **URL**: `/interest`
+- **Method**: `GET`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `interest.findAll`
+- **Query Parameters**:
+  - Supports objection-find library query parameters for filtering
+  - Use `eager=[member,opportunity]` to include related member and opportunity data
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+When eager loading is not used:
+```json
+[
+  {
+    "id": "a1b2c3d4e5f67890g1h2i3j4k5l6m7n8",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "memberId": "1d4b928612524eaa93c3d84ecf433ef2",
+    "opportunityId": "cdd519e8cec247aca455ec05faccfad2",
+    "createdAt": "2025-03-07T04:41:29.000Z",
+    "updatedAt": "2025-03-07T04:41:29.000Z"
+  },
+  {
+    "id": "o9p0q1r2s3t4u5v6w7x8y9z0a1b2c3d4",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "memberId": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+    "opportunityId": "e5f6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
+    "createdAt": "2025-03-07T04:41:29.000Z",
+    "updatedAt": "2025-03-07T04:41:29.000Z"
+  }
+  // More interest records...
+]
+```
+
+When using eager loading with `eager=[member,opportunity]`:
+```json
+[
+  {
+    "id": "a1b2c3d4e5f67890g1h2i3j4k5l6m7n8",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "memberId": "1d4b928612524eaa93c3d84ecf433ef2",
+    "opportunityId": "cdd519e8cec247aca455ec05faccfad2",
+    "createdAt": "2025-03-07T04:41:29.000Z",
+    "updatedAt": "2025-03-07T04:41:29.000Z",
+    "member": {
+      "id": "1d4b928612524eaa93c3d84ecf433ef2",
+      "firstName": "John",
+      "lastName": "Doe",
+      "phoneNumber": "255712345678"
+      // Other member fields...
+    },
+    "opportunity": {
+      "id": "cdd519e8cec247aca455ec05faccfad2",
+      "name": "Main Choir",
+      "description": "Sing in the church's main choir during Sunday services"
+      // Other opportunity fields...
+    }
+  },
+  {
+    "id": "o9p0q1r2s3t4u5v6w7x8y9z0a1b2c3d4",
+    "churchId": "19d4e951c2324768b20d689e2fc1ce81",
+    "memberId": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+    "opportunityId": "e5f6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
+    "createdAt": "2025-03-07T04:41:29.000Z",
+    "updatedAt": "2025-03-07T04:41:29.000Z",
+    "member": {
+      "id": "f2a5b97ec31b4d698a21c7dbc7e3a1f9",
+      "firstName": "Jane", 
+      "lastName": "Smith",
+      "phoneNumber": "255723456789"
+      // Other member fields...
+    },
+    "opportunity": {
+      "id": "e5f6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
+      "name": "Sunday School Teacher",
+      "description": "Teach children during Sunday School sessions"
+      // Other opportunity fields...
+    }
+  }
+  // More interest records...
+]
+```
 
 ## Envelopes
 

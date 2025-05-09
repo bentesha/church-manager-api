@@ -13,6 +13,7 @@ import { EnvelopeController } from './controllers/envelope.controller';
 import { NotificationController } from './controllers/notification.controller';
 import { AdminModule } from './admin/admin.module';
 import { CommonModule } from './common/common.module';
+import { InterestController } from './controllers/interest.controller';
 
 @Module({
   imports: [CommonModule, AdminModule],
@@ -27,6 +28,7 @@ import { CommonModule } from './common/common.module';
     OpportunityController,
     EnvelopeController,
     NotificationController,
+    InterestController,
   ],
   providers: [AppService],
 })
