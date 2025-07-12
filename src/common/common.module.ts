@@ -15,6 +15,7 @@ import { EmailService } from './services/email.service';
 import { PasswordResetTokenService } from './services/password.reset.token.service';
 import { AuthService } from './services/auth.service';
 import { InterestService } from './services/interest.service';
+import { ImageService } from './services/image.service';
 
 /**
  * Common module that provides shared services across the application
@@ -44,6 +45,7 @@ import { InterestService } from './services/interest.service';
     RoleService,
     PasswordResetTokenService,
     InterestService,
+    ImageService,
   ],
   exports: [
     // Export all providers so they're available to importing modules
@@ -63,6 +65,7 @@ import { InterestService } from './services/interest.service';
     PasswordResetTokenService,
     AuthService,
     InterestService,
+    ImageService,
   ],
 })
 export class CommonModule {}

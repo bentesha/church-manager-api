@@ -13,12 +13,13 @@ This document outlines all available API endpoints, request/response formats, an
 7. [Volunteer Interests](#volunteer-interests)
 8. [Roles](#roles)
 9. [Envelopes](#envelopes)
+10. [Images](#images)
 
 ## Authentication
 
 Authentication is required for most endpoints. The API uses token-based authentication.
 
-All endpoints (except `/auth/login`, `/auth/forgot-password`, `/auth/verify-reset-token/:token`, and `/auth/reset-password`) require a Bearer token in the Authorization header:
+All endpoints (except `/auth/login`, `/auth/forgot-password`, `/auth/verify-reset-token/:token`, `/auth/reset-password`, and `/image/:filename`) require a Bearer token in the Authorization header:
 
 ```
 Authorization: Bearer 5f37cf57978edcaa7102bd970864a502fb65c5dd1b00abd849f1de09721a1672
@@ -811,7 +812,7 @@ Retrieves a list of all members belonging to the current church.
     "gender": "Male",
     "dateOfBirth": "1985-06-14T21:00:00.000Z",
     "placeOfBirth": "Dar es Salaam",
-    "profilePhoto": "https://example.com/photos/john-doe.jpg",
+    "profilePhoto": "f69ca35a-c9a4-400a-bab5-0328e61ef4cc.jpg",
     "maritalStatus": "Married",
     "marriageType": "Christian",
     "dateOfMarriage": "2010-09-21T21:00:00.000Z",
@@ -893,7 +894,7 @@ Retrieves a specific member by ID.
   "gender": "Male",
   "dateOfBirth": "1985-06-14T21:00:00.000Z",
   "placeOfBirth": "Dar es Salaam",
-  "profilePhoto": "https://example.com/photos/john-doe.jpg",
+  "profilePhoto": "f69ca35a-c9a4-400a-bab5-0328e61ef4cc.jpg",
   "maritalStatus": "Married",
   "marriageType": "Christian",
   "dateOfMarriage": "2010-09-21T21:00:00.000Z",
@@ -979,7 +980,7 @@ Creates a new member.
   "gender": "Male",
   "dateOfBirth": "1985-06-15",
   "placeOfBirth": "Dar es Salaam",
-  "profilePhoto": "https://example.com/photos/john-doe.jpg",
+  "profilePhoto": "f69ca35a-c9a4-400a-bab5-0328e61ef4cc.jpg",
   "maritalStatus": "Married",
   "marriageType": "Christian",
   "dateOfMarriage": "2010-09-22",
@@ -1726,3 +1727,109 @@ Releases an envelope from a member, making it available for assignment to anothe
       "statusCode": 409
     }
     ```
+
+## Images
+
+Endpoints for managing image uploads and serving profile images.
+
+### Upload Image
+
+Uploads an image file to the server storage. Returns a filename that can be used to reference the image in other parts of the application (such as member profile photos).
+
+- **URL**: `/image/upload`
+- **Method**: `POST`
+- **Auth Required**: Yes (Bearer token)
+- **Required Permissions**: `image.upload`
+- **Content Type**: `multipart/form-data`
+
+#### Request Body
+
+Form data with the following field:
+- `image`: Image file (Required)
+
+**Supported formats**: JPEG, PNG, GIF, WebP
+**Maximum file size**: 5MB
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**:
+
+```json
+{
+  "filename": "f69ca35a-c9a4-400a-bab5-0328e61ef4cc.png"
+}
+```
+
+#### Error Responses
+
+- **Code**: 400 Bad Request
+  - **Content**:
+    ```json
+    {
+      "message": "No file uploaded",
+      "error": "Bad Request",
+      "statusCode": 400
+    }
+    ```
+
+- **Code**: 400 Bad Request
+  - **Content**:
+    ```json
+    {
+      "message": "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed",
+      "error": "Bad Request", 
+      "statusCode": 400
+    }
+    ```
+
+- **Code**: 400 Bad Request
+  - **Content**:
+    ```json
+    {
+      "message": "File size too large. Maximum size is 5MB",
+      "error": "Bad Request",
+      "statusCode": 400
+    }
+    ```
+
+### Get Image
+
+Retrieves and serves an image file by its filename. This endpoint is publicly accessible and does not require authentication.
+
+- **URL**: `/image/:filename`
+- **Method**: `GET`
+- **Auth Required**: No (Public endpoint)
+
+#### Success Response
+
+- **Code**: 200 OK
+- **Content**: Image file stream with appropriate Content-Type header
+- **Headers**:
+  - `Content-Type`: Image MIME type (e.g., `image/jpeg`, `image/png`)
+  - `Cache-Control`: `public, max-age=31536000` (1 year cache)
+
+#### Error Response
+
+- **Code**: 404 Not Found
+- **Content**:
+  ```json
+  {
+    "message": "Image not found"
+  }
+  ```
+
+### Usage with Member Profiles
+
+When creating or updating a member, you can reference uploaded images using the filename returned from the upload endpoint:
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "profilePhoto": "f69ca35a-c9a4-400a-bab5-0328e61ef4cc.png",
+  ...
+}
+```
+
+The image can then be accessed at: `/image/f69ca35a-c9a4-400a-bab5-0328e61ef4cc.png`

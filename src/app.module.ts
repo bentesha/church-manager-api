@@ -14,6 +14,7 @@ import { NotificationController } from './controllers/notification.controller';
 import { AdminModule } from './admin/admin.module';
 import { CommonModule } from './common/common.module';
 import { InterestController } from './controllers/interest.controller';
+import { ImageController } from './controllers/image.controller';
 
 @Module({
   imports: [CommonModule, AdminModule],
@@ -29,6 +30,7 @@ import { InterestController } from './controllers/interest.controller';
     EnvelopeController,
     NotificationController,
     InterestController,
+    ImageController,
   ],
   providers: [AppService],
 })
@@ -42,6 +44,7 @@ export class AppModule {
         { path: 'auth/forgot-password', method: RequestMethod.POST },
         { path: 'auth/verify-reset-token/:token', method: RequestMethod.GET },
         { path: 'auth/reset-password', method: RequestMethod.POST },
+        { path: 'image/:filename', method: RequestMethod.GET },
       )
       .forRoutes('*');
   }

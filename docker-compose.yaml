@@ -7,10 +7,16 @@ services:
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
+
+      - MINIO_ENDPOINT
+      - MINIO_PORT
+      - MINIO_ACCESS_KEY
+      - MINIO_SECRET_KEY
     ports:
       - $PORT:3000
     depends_on:
       - db
+      - minio
 
   db:
     image: mysql:latest
@@ -20,3 +26,16 @@ services:
       - MYSQL_DATABASE
     volumes:
       - .data/mysql:/var/lib/mysql
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    environment:
+      - MINIO_ROOT_USER=$MINIO_ACCESS_KEY
+      - MINIO_ROOT_PASSWORD=$MINIO_SECRET_KEY
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - .data/minio:/data
+    command: server /data --console-address ":9001"

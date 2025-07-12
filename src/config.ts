@@ -27,6 +27,13 @@ export class Config {
     jwtSecret: string;
   };
 
+  minio: {
+    endPoint: string;
+    port: number;
+    accessKey: string;
+    secretKey: string;
+  };
+
   constructor() {
     this.loadConfig();
   }
@@ -54,6 +61,13 @@ export class Config {
 
     this.admin = {
       jwtSecret: String(process.env.ADMIN_JWT_SECRET || 'default-admin-jwt-secret'),
+    };
+
+    this.minio = {
+      endPoint: String(process.env.MINIO_ENDPOINT || 'minio'),
+      port: Number(process.env.MINIO_PORT) || 9000,
+      accessKey: String(process.env.MINIO_ACCESS_KEY || ''),
+      secretKey: String(process.env.MINIO_SECRET_KEY || ''),
     };
   }
 }
