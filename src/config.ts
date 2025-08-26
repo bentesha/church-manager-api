@@ -34,6 +34,10 @@ export class Config {
     secretKey: string;
   };
 
+  cubejs: {
+    endpoint: string;
+  };
+
   constructor() {
     this.loadConfig();
   }
@@ -60,7 +64,9 @@ export class Config {
     };
 
     this.admin = {
-      jwtSecret: String(process.env.ADMIN_JWT_SECRET || 'default-admin-jwt-secret'),
+      jwtSecret: String(
+        process.env.ADMIN_JWT_SECRET || 'default-admin-jwt-secret',
+      ),
     };
 
     this.minio = {
@@ -68,6 +74,12 @@ export class Config {
       port: Number(process.env.MINIO_PORT) || 9000,
       accessKey: String(process.env.MINIO_ACCESS_KEY || ''),
       secretKey: String(process.env.MINIO_SECRET_KEY || ''),
+    };
+
+    this.cubejs = {
+      endpoint: String(
+        process.env.CUBEJS_ENDPOINT || 'http://cubejs:4000/cubejs-api/v1',
+      ),
     };
   }
 }

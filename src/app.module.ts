@@ -15,6 +15,7 @@ import { AdminModule } from './admin/admin.module';
 import { CommonModule } from './common/common.module';
 import { InterestController } from './controllers/interest.controller';
 import { ImageController } from './controllers/image.controller';
+import { ReportController } from './controllers/report.controller';
 
 @Module({
   imports: [CommonModule, AdminModule],
@@ -31,6 +32,7 @@ import { ImageController } from './controllers/image.controller';
     NotificationController,
     InterestController,
     ImageController,
+    ReportController,
   ],
   providers: [AppService],
 })
