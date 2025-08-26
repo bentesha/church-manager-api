@@ -1,6 +1,6 @@
 cubes:
   - name: users
-    sql_table: dmp.users
+    sql_table: users
     data_source: default
 
     joins:

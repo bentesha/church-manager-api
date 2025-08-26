@@ -1,6 +1,6 @@
 cubes:
   - name: knex_migrations
-    sql_table: dmp.knex_migrations
+    sql_table: knex_migrations
     data_source: default
 
     joins: []

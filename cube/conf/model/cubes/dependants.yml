@@ -1,6 +1,6 @@
 cubes:
   - name: dependants
-    sql_table: dmp.dependants
+    sql_table: dependants
     data_source: default
 
     joins:

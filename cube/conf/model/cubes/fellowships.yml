@@ -1,6 +1,6 @@
 cubes:
   - name: fellowships
-    sql_table: dmp.fellowships
+    sql_table: fellowships
     data_source: default
 
     joins:

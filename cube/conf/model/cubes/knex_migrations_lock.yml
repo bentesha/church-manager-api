@@ -1,6 +1,6 @@
 cubes:
   - name: knex_migrations_lock
-    sql_table: dmp.knex_migrations_lock
+    sql_table: knex_migrations_lock
     data_source: default
 
     joins: []

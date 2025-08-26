@@ -1,6 +1,6 @@
 cubes:
   - name: churches
-    sql_table: dmp.churches
+    sql_table: churches
     data_source: default
 
     joins: []

@@ -1,6 +1,6 @@
 cubes:
   - name: volunteer_opportunities
-    sql_table: dmp.volunteer_opportunities
+    sql_table: volunteer_opportunities
     data_source: default
 
     joins:

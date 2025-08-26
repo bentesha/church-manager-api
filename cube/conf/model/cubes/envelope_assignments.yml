@@ -1,6 +1,6 @@
 cubes:
   - name: envelope_assignments
-    sql_table: dmp.envelope_assignments
+    sql_table: envelope_assignments
     data_source: default
 
     joins:

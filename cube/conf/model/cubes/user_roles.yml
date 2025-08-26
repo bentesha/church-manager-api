@@ -1,6 +1,6 @@
 cubes:
   - name: user_roles
-    sql_table: dmp.user_roles
+    sql_table: user_roles
     data_source: default
 
     joins:

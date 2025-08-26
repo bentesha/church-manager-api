@@ -1,6 +1,6 @@
 cubes:
   - name: role_actions
-    sql_table: dmp.role_actions
+    sql_table: role_actions
     data_source: default
 
     joins: []

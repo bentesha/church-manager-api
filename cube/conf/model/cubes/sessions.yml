@@ -1,6 +1,6 @@
 cubes:
   - name: sessions
-    sql_table: dmp.sessions
+    sql_table: sessions
     data_source: default
 
     joins:
